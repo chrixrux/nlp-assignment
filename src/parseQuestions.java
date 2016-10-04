@@ -14,12 +14,12 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class parseQuestions extends DefaultHandler{
-	List<Integer> postsIds = new ArrayList<Integer>();
-	HashMap AnswersToQuestions = new HashMap<>();
-	HashMap postsLength = new HashMap();
-	PrintWriter output_file;
-	PrintWriter stats;
-	static String filename = "C:/Users/DELL/Downloads/posts.xml";
+	private List<Integer> postsIds = new ArrayList<Integer>();
+	private HashMap<Integer, Integer> AnswersToQuestions = new HashMap<>();
+	private HashMap<String, Integer> postsLength = new HashMap<>();
+	private PrintWriter output_file;
+	private PrintWriter stats;
+	private static String filename = "C:/Users/DELL/Downloads/posts.xml";
 	
 	public static void main(String[] args){
 		// start parsing the XML data
@@ -70,7 +70,7 @@ public class parseQuestions extends DefaultHandler{
     				if ((answers > 3) && (answers < 8)) {
     					
     					// update answers stats
-    					int count = AnswersToQuestions.containsKey(answers) ? (int) AnswersToQuestions.get(answers) : 0;
+    					int count = AnswersToQuestions.containsKey(answers) ? AnswersToQuestions.get(answers) : 0;
     					AnswersToQuestions.put(answers, count + 1);
     					String postId = atts.getValue("Id");
     					postsIds.add(Integer.parseInt(postId));
@@ -79,11 +79,11 @@ public class parseQuestions extends DefaultHandler{
     					String content = atts.getValue("Body");
     					int content_len = wordcount(content); 
     					if (content_len  < 50) {
-    						postsLength.put("short", (int)postsLength.get("short") + 1);
+    						postsLength.put("short", postsLength.get("short") + 1);
     					}else if (content_len < 100) {
-    						postsLength.put("average", (int)postsLength.get("average") + 1);
+    						postsLength.put("average", postsLength.get("average") + 1);
     					} else {
-    						postsLength.put("long", (int)postsLength.get("long") + 1);
+    						postsLength.put("long", postsLength.get("long") + 1);
     					}
     					
     					// add the content to our dataset
@@ -167,11 +167,11 @@ public class parseQuestions extends DefaultHandler{
 					String content = atts.getValue("Body");
 					int content_len = wordcount(content); 
 					if (content_len  < 50) {
-						postsLength.put("short", (int)postsLength.get("short") + 1);
+						postsLength.put("short", postsLength.get("short") + 1);
 					}else if (content_len < 100) {
-						postsLength.put("average", (int)postsLength.get("average") + 1);
+						postsLength.put("average", postsLength.get("average") + 1);
 					} else {
-						postsLength.put("long", (int)postsLength.get("long") + 1);
+						postsLength.put("long", postsLength.get("long") + 1);
 					}
 					
 					// add the content to our dataset
