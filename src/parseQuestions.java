@@ -19,7 +19,7 @@ public class parseQuestions extends DefaultHandler{
 	private HashMap<String, Integer> postsLength = new HashMap<>();
 	private PrintWriter output_file;
 	private PrintWriter stats;
-	private static String filename = "C:/Users/DELL/Downloads/posts.xml";
+	private static String filename = "resources/data/dataset.txt";
 	
 	public static void main(String[] args){
 		// start parsing the XML data
@@ -45,8 +45,8 @@ public class parseQuestions extends DefaultHandler{
     	
     	// open up output files : dataset and statistics
     	try {
-    		output_file = new PrintWriter("c:/dataset.txt", "UTF-8");
-    		stats = new PrintWriter("c:/stats.txt", "UTF-8");
+    		output_file = new PrintWriter("resources/output/dataset.txt", "UTF-8");
+    		stats = new PrintWriter("resources/output/stats.txt", "UTF-8");
     	} catch (Exception e){
     		System.out.println("error in openning output files");
     	}
@@ -91,7 +91,7 @@ public class parseQuestions extends DefaultHandler{
     					output_file.println(noHtmlContent);
     					output_file.println("");
     					// only get 100 questions
-    					if (postsIds.size() == 100){
+    					if (postsIds.size() == 200){
     						try {
     							// find answers for each question
     						 SAXParserFactory spf = SAXParserFactory.newInstance();
@@ -181,7 +181,7 @@ public class parseQuestions extends DefaultHandler{
         		}
         	}
         	// stop parsing when we got enough data
-        	if (answersIds.size() > 400){
+        	if (answersIds.size() > 900){
         		// output stats
         		stats.println(AnswersToQuestions.toString());
         		stats.println(postsLength.toString());
