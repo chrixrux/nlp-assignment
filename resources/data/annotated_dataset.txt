@@ -1,0 +1,2360 @@
+How do you expose a LINQ query as an ASMX web service? Usually, from the business tier, I can return a typed DataSet or DataTable which can be serialized for transport over ASMX.
+
+How can I do the same for a LINQ query? Is there a way to populate a typed DataSet or DataTable via a LINQ query?: 
+
+public static MyDataTable CallMySproc()    
+{    
+    string conn = ...;
+
+    MyDatabaseDataContext db = new MyDatabaseDataContext(conn);    
+    MyDataTable dt = new MyDataTable();
+
+    // execute a sproc via LINQ
+    var query = from dr in db.MySproc().AsEnumerable
+    select dr;
+
+    // copy LINQ query resultset into a DataTable -this does not work !    
+    dt = query.CopyToDataTable();
+
+    return dt;
+}
+
+
+How can I get the resultset of a LINQ query into a DataSet or DataTable? Alternatively, is the LINQ query serializeable so that I can expose it as an ASMX web service?
+
+
+
+----------------------------------------
+Let's say I have a DataTable with a Name column. I want to have a collection of the unique names ordered alphabetically. The following query ignores the order by clause.
+
+var names =
+    (from DataRow dr in dataTable.Rows
+    orderby (string)dr["Name"]
+    select (string)dr["Name"]).Distinct();
+
+
+Why does the orderby not get enforced?
+
+----------------------------------------
+I want to print HTML from a C# web service.  The Web Browser control is overkill, and does not function well in a service environment, nor does it function well on a system with very tight security constraints.  Is there any sort of free .NET library that will support the printing of a basic HTML page?  Here is the code I have so far, which does not run properly.
+
+public void PrintThing(string document)
+{
+    if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
+    {
+        Thread thread =
+            new Thread((ThreadStart) delegate { PrintDocument(document); });
+        thread.SetApartmentState(ApartmentState.STA);
+        thread.Start();
+    }
+    else
+    {
+        PrintDocument(document);
+    }
+}
+
+protected void PrintDocument(string document)
+{
+    WebBrowser browser = new WebBrowser();
+    browser.DocumentText = document;
+    while (browser.ReadyState != WebBrowserReadyState.Complete)
+    {
+        Application.DoEvents();
+    }
+    browser.Print();
+}
+
+
+This works fine when called from UI-type threads, but nothing happens when called from a service-type thread.  Changing Print() to ShowPrintPreviewDialog() yields the following IE script error:
+
+
+  Error: 'dialogArguments.___IE_PrintType' is null or not an object
+  URL: res://ieframe.dll/preview.dlg
+
+
+And a small empty print preview dialog appears.
+
+----------------------------------------
+When is it appropriate to use an unsigned variable over a signed one? What about in a for loop?
+
+I hear a lot of opinions about this and I wanted to see if there was anything resembling a consensus. 
+
+for (unsigned int i = 0; i &lt; someThing.length(); i++) {  
+    SomeThing var = someThing.at(i);  
+    // You get the idea.  
+}
+
+
+I know Java doesn't have unsigned values, and that must have been a concious decision on Sun Microsystems' part. 
+
+----------------------------------------
+I'm looking for a way to delete a file which is locked by another process using C#. I suspect the method must be able to find which process is locking the file (perhaps by tracking the handles, although I'm not sure how to do this in C#) then close that process before being able to complete the file delete using File.Delete().
+
+----------------------------------------
+I have a custom validation function in JavaScript in a user control on a .Net 2.0 web site which checks to see that the fee paid is not in excess of the fee amount due. 
+
+I've placed the validator code in the ascx file, and I have also tried using Page.ClientScript.RegisterClientScriptBlock() and in both cases the validation fires, but cannot find the JavaScript function.
+
+The output in Firefox's error console is "feeAmountCheck is not defined". Here is the function (this was taken directly from firefox->view source)
+
+&lt;script type="text/javascript"&gt;
+    function feeAmountCheck(source, arguments)
+    {
+        var amountDue = document.getElementById('ctl00_footerContentHolder_Fees1_FeeDue');
+        var amountPaid = document.getElementById('ctl00_footerContentHolder_Fees1_FeePaid');
+
+        if (amountDue.value &gt; 0 &amp;&amp; amountDue &gt;= amountPaid)
+        {
+            arguments.IsValid = true;
+        }
+        else
+        {
+            arguments.IsValid = false;
+        }
+
+        return arguments;
+    }
+&lt;/script&gt;
+
+
+Any ideas as to why the function isn't being found? How can I remedy this without having to add the function to my master page or consuming page?
+
+----------------------------------------
+I've never been completely happy with the way exception handling works, there's a lot exceptions and try/catch brings to the table (stack unwinding, etc.), but it seems to break a lot of the OO model in the process.
+
+Anyway, here's the problem:
+
+Let's say you have some class which wraps or includes networked file IO operations (e.g. reading and writing to some file at some particular UNC path somewhere). For various reasons you don't want those IO operations to fail, so if you detect that they fail you retry them and you keep retrying them until they succeed or you reach a timeout. I already have a convenient RetryTimer class which I can instantiate and use to sleep the current thread between retries and determine when the timeout period has elapsed, etc.
+
+The problem is that you have a bunch of IO operations in several methods of this class, and you need to wrap each of them in try-catch / retry logic.
+
+Here's an example code snippet:
+
+RetryTimer fileIORetryTimer = new RetryTimer(TimeSpan.FromHours(10));bool success = false;while (!success){    try    {        // do some file IO which may succeed or fail        success = true;    }    catch (IOException e)    {        if (fileIORetryTimer.HasExceededRetryTimeout)        {            throw e;        }        fileIORetryTimer.SleepUntilNextRetry();    }}
+
+So, how do you avoid duplicating most of this code for every file IO operation throughout the class? My solution was to use anonymous delegate blocks and a single method in the class which executed the delegate block passed to it. This allowed me to do things like this in other methods:
+
+this.RetryFileIO( delegate()    {        // some code block    } );
+
+I like this somewhat, but it leaves a lot to be desired. I'd like to hear how other people would solve this sort of problem.
+
+----------------------------------------
+How do I delimit a Javascript databound string parameter in an anchor OnClick event?
+
+
+I have an anchor tag in an ASP.NET Repeater control.  
+The OnClick event of the anchor contains a call to a Javascript function.  
+The Javascript function takes a string for its input parameter.  
+The string parameter is populated with a databound value from the Repeater.
+
+
+I need the "double quotes" for the Container.DataItem.
+I need the 'single quotes' for the OnClick.
+
+And I still need one more delimiter (triple quotes?) for the input string parameter of the Javascript function call.
+
+Since I can't use 'single quotes' again, how do I ensure the Javascript function knows the input parameter is a string and not an integer?
+
+Without the extra quotes around the input string parameter, the Javascript function thinks I'm passing in an integer.
+
+Cheers in advance for any knowledge you can drop.
+
+The anchor:
+
+&lt;a id="aShowHide" onclick='ToggleDisplay(&lt;%# DataBinder.Eval(Container.DataItem, "JobCode") %&gt;);' &gt;Show/Hide&lt;/a&gt;    
+
+
+and here is the Javascript:
+
+&lt;script language="JavaScript" type="text/javascript"&gt;
+/* Shows/Hides the Jobs Div */
+  function ToggleDisplay(jobCode)
+  {
+  /* Each div has it's ID set dynamically ('d' plus the JobCode) */
+    var elem = document.getElementById('d' + jobCode);
+
+    if (elem) 
+    {
+      if (elem.style.display != 'block') 
+      {
+        elem.style.display = 'block';
+        elem.style.visibility = 'visible';
+      } 
+      else
+      {
+        elem.style.display = 'none';
+        elem.style.visibility = 'hidden';
+      }
+    }
+  }
+&lt;/script&gt;
+
+
+----------------------------------------
+I'm trying to read binary data using C#. I have all information about the layout of the data in the files I want to read. I'm able to read the data "chunk by chunk", i.e. getting the first 40 bytes of data converting it to a string, get the next 40 bytes, ...
+Since there are at least three slighlty different version of the data, I would like to read the data directly into a struct. It just feels so much more right than by reading it "line by line".
+I have tried the following approach but to no avail:StructType aStruct;
+int count = Marshal.SizeOf(typeof(StructType));
+byte[] readBuffer = new byte[count];
+BinaryReader reader = new BinaryReader(stream);
+readBuffer = reader.ReadBytes(count);
+GCHandle handle = GCHandle.Alloc(readBuffer, GCHandleType.Pinned);
+aStruct = (StructType) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(StructType));
+handle.Free();
+
+The stream is an opened FileStream from which I have began to read from. I get an AccessViolationException when using Marshal.PtrToStructure.
+The stream contains more information than I'm trying to read since I'm not interested in data at the end of the file.
+The struct is defined like:[StructLayout(LayoutKind.Explicit)]
+struct StructType
+{
+    [FieldOffset(0)]
+    public string FileDate;
+    [FieldOffset(8)]
+    public string FileTime;
+    [FieldOffset(16)]
+    public int Id1;
+    [FieldOffset(20)]
+    public string Id2;
+}
+
+The examples code is changed from original to make this question shorter.
+How would I read binary data from a file into a struct?
+----------------------------------------
+
+
+The problem is that the Distinct
+ operator does not grant that it will
+ maintain the original order of
+ values.
+
+So your query will need to work like this
+
+var names = (from DataRow dr in dataTable.Rows
+             select (string)dr["Name"]).Distinct().OrderBy( name =&gt; name );
+
+----------------------------------------
+It is very simple with the Skip and Take extension methods.
+
+var query = from i in ideas
+            select i;
+
+var paggedCollection = query.Skip(startIndex).Take(count);
+
+----------------------------------------
+I don't know the ASP.NET side of the problem but .NET has a pretty powerful class: System.Globalization.CultureInfo. You can use the following code to parse a string containing a double value:
+
+double d = double.Parse("100.20", CultureInfo.CurrentCulture);//  -- OR --double d = double.Parse("100.20", CultureInfo.CurrentUICulture);
+
+If ASP.NET somehow (i.e. using HTTP Request headers) passes current user's CultureInfo to either CultureInfo.CurrentCulture or CultureInfo.CurrentUICulture, these will work fine.
+
+----------------------------------------
+You can't please everyone.  If I enter ten as 10.000, and someone enters ten thousand as 10.000, you cannot handle that without some knowledge of the culture of the input.  Detect the culture somehow (browser, system setting - what is the use case?  ASP?  Internal app, or open to the world?), or provide an example of the expected formatting, and use the most lenient parser you can.  Probably something like:
+
+double d = Double.Parse("5,000.00", NumberStyles.Any, CultureInfo.InvariantCulture);
+
+----------------------------------------
+With the "Built in" stuff, you can't, as using 1.0.* or 1.0.0.* will replace the revision and build numbers with a coded date/timestamp, which is usually also a good way. 
+
+For more info, see the Assembly Linker Documentation in the /v tag.
+
+As for automatically incrementing numbers, use the AssemblyInfo Task:
+
+AssemblyInfo Task
+
+This can be configured to automatically increment the build number.
+
+There are 2 Gotchas:
+
+
+Each of the 4 numbers in the Version string is limited to 65535. This is a Windows Limitation and unlikely to get fixed.
+
+Why are build numbers limited to 65535?
+
+Using with with Subversion requires a small change:
+
+Using MSBuild to generate assembly version info at build time (including SubVersion fix)
+
+
+
+Retrieving the Version number is then quite easy:
+
+Version v = Assembly.GetExecutingAssembly().GetName().Version;
+string About = string.Format(CultureInfo.InvariantCulture, @"YourApp Version {0}.{1}.{2} (r{3})", v.Major, v.Minor, v.Build, v.Revision);
+
+
+
+
+And, to clarify: In .net or at least in C#, the build is actually the THIRD number, not the fourth one as some people (for example Delphi Developers who are used to Major.Minor.Release.Build) might expect.
+
+In .net, it's Major.Minor.Build.Revision.
+
+----------------------------------------
+Here is my current method. Any suggestions?
+
+Regex singleMToDoubleRegex = new Regex("(?&lt;!m)m(?!m)");Regex singleDToDoubleRegex = new Regex("(?&lt;!d)d(?!d)");CultureInfo currentCulture = CultureInfo.CurrentUICulture;// If the culture is netural there is no date pattern to use, so use the default.if (currentCulture.IsNeutralCulture){    currentCulture = CultureInfo.InvariantCulture;}// Massage the format into a more general user friendly form.string shortDatePattern = CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern.ToLower();shortDatePattern = singleMToDoubleRegex.Replace(shortDatePattern, "mm");shortDatePattern = singleDToDoubleRegex.Replace(shortDatePattern, "dd");
+
+----------------------------------------
+You can print from the command line using the following:
+
+
+  rundll32.exe
+  %WINDIR%\System32\mshtml.dll,PrintHTML
+  "%1"
+
+
+Where %1 is the file path of the html file to be printed.
+
+If you don't need to print from memory (or can afford to write to the disk in a temp file) you can use:
+
+using (Process printProcess = new Process()){    string systemPath = Environment.GetFolderPath(Environment.SpecialFolder.System);    printProcess.StartInfo.FileName = systemPath + @"\rundll32.exe";    printProcess.StartInfo.Arguments = systemPath + @"\mshtml.dll,PrintHTML """ + fileToPrint + @"""";    printProcess.Start();}
+
+N.B. This only works on Windows 2000 and above I think.
+
+----------------------------------------
+I uploaded it and got an internal error
+
+Premature end of script headers
+
+After much playing around, I found that if I had
+
+import cgiimport cgitb; cgitb.enable()import MySQLdb
+
+It would give me a much more useful answer and say that it was not installed, you can see it yourself -> http://woarl.com/db.py
+
+Oddly enough, this would produce an error
+
+import MySQLdbimport cgiimport cgitb; cgitb.enable();
+
+I looke at some of the other files I had up there and it seems that library was one of the ones I had already tried.
+
+----------------------------------------
+A solution, albeit one that defers handling of the null value to the code, could be:
+
+
+  DateTime yesterday = DateTime.Now.Date.AddDays(-1);
+
+
+var collection=
+    from u in db.Universe
+    select new
+    {
+        u.id,
+        u.name,
+        MaxDate =(DateTime?)
+       (
+           from h in db.History
+           where u.Id == h.Id
+           &amp;&amp; h.dateCol &lt; yesterday
+           select h.dateCol 
+       ).Max()
+    };
+
+
+This does not produce exactly the same SQL, but does provide the same logical result. Translating "complex" SQL queries to LINQ is not always straightforward.
+
+
+----------------------------------------
+Very roughly and from memory since I don't have code on this laptop:
+
+using (OleDBConnection conn = new OleDbConnection())
+{
+  conn.ConnectionString = "Whatever connection string";
+
+  using (OleDbCommand cmd = new OleDbCommand())
+  {
+    cmd.Connection = conn;
+    cmd.CommandText = "Select * from CoolTable";
+
+    using (OleDbDataReader dr = cmd.ExecuteReader())
+    {
+      while (dr.Read())
+      {
+        // do something like Console.WriteLine(dr["column name"] as String);
+      }
+    }
+  }
+}
+
+----------------------------------------
+@Goyuix -- that's excellent for something written from memory.
+tested it here -- found the connection wasn't opened. Otherwise very nice.
+
+using System.Data.OleDb;
+...
+
+using (OleDbConnection conn = new OleDbConnection())
+{
+    conn.ConnectionString = "Provider=sqloledb;Data Source=yourServername\\yourInstance;Initial Catalog=databaseName;Integrated Security=SSPI;";
+
+    using (OleDbCommand cmd = new OleDbCommand())
+    {
+        conn.Open();
+        cmd.Connection = conn;
+        cmd.CommandText = "Select * from yourTable";
+
+        using (OleDbDataReader dr = cmd.ExecuteReader())
+        {
+            while (dr.Read())
+            {
+                Console.WriteLine(dr["columnName"]);
+            }
+        }
+    }
+}
+
+----------------------------------------
+That's definitely a good way to do it.  But you if you happen to be using a database that supports LINQ to SQL, it can be a lot more fun.  It can look something like this:
+
+MyDB db = new MyDB("Data Source=...");var q = from db.MyTable        select c;foreach (var c in q)  Console.WriteLine(c.MyField.ToString());
+
+----------------------------------------
+Don't worry about DNS and URL rewriting
+
+Your DNS record will be static, something like:
+
+*.YOURDOMAIN.COM A 123.123.123.123
+
+Ask your DNS provider to do it for you (if it's not done already) or do it by yourself if you have control over your DNS records. This will automatically point all your subdomains (current and future ones) into the same HTTP server.
+
+Once it's done, you will only need to parse HOST header on every single http request to detect what hostname was used to access your server-side scripts on your http server.
+
+Assuming you're using ASP.NET, this is kind of silly example I came up with but works and demonstrates simplicity of this approach:
+
+&lt;%@ Language="C#" %&gt;&lt;%string subDomain = Request.Url.Host.Split('.')[0].ToUpper();if (subDomain == "CLIENTXXX") Response.Write("Hello CLIENTXXX, your secret number is 33");else if (subDomain == "CLIENTYYY") Response.Write("Hello CLIENTYYY, your secret number is 44");else Response.Write(subDomain+" doesn't exist");%&gt;
+
+----------------------------------------
+I've knocked up a basic version of what I'm looking for, it's not perfect but it'll do the job until something better comes along.
+
+public class LimitedQueue&lt;T&gt; : Queue&lt;T&gt;{    private int limit = -1;    public int Limit    {        get { return limit; }        set { limit = value; }    }    public LimitedQueue(int limit)        : base(limit)    {        this.Limit = limit;    }    public new void Enqueue(T item)    {        if (this.Count &gt;= this.Limit)        {            this.Dequeue();        }        base.Enqueue(item);    }}
+
+----------------------------------------
+Here is a solution that works in XP / Vista, but is definitely expandable to OSX, linux, I'd still be interested in another way.
+
+public static function GetCurrentOSUser():String{
+    // XP &amp; Vista only.
+    var userDirectory:String = File.userDirectory.resolvePath("").nativePath;
+    var startIndex:Number = userDirectory.lastIndexOf("\\") + 1
+    var stopIndex:Number = userDirectory.length;
+    var user = userDirectory.substring(startIndex, stopIndex);
+
+    return user;
+}
+
+----------------------------------------
+One potential thing you can do is contain the object rather than extend from the other class.  This will give you the most flexibility in terms of exposing what you want to expose, but if you absolutely need the object to be of that type it is not the ideal solution (however you could expose the object from a getter).
+
+Thus:
+
+public class MyClass : BaseClass{    // Your stuff here}
+
+Becomes:
+
+public class MyClass{    private BaseClass baseClass;    public void ExposeThisMethod()    {        baseClass.ExposeThisMethod();    }}
+
+Or:
+
+public class MyClass{    private BaseClass baseClass;    public BaseClass BaseClass    {        get        {            return baseClass;        }    }}
+
+----------------------------------------
+Just wondering, what do you feel your method leaves to be desired?  You could replace the anonymous delegate with a.. named? delegate, something like
+
+    public delegate void IoOperation(params string[] parameters);    public void FileDeleteOperation(params string[] fileName)    {        File.Delete(fileName[0]);    }    public void FileCopyOperation(params string[] fileNames)    {        File.Copy(fileNames[0], fileNames[1]);    }    public void RetryFileIO(IoOperation operation, params string[] parameters)    {        RetryTimer fileIORetryTimer = new RetryTimer(TimeSpan.FromHours(10));        bool success = false;        while (!success)        {            try            {                operation(parameters);                success = true;            }            catch (IOException e)            {                if (fileIORetryTimer.HasExceededRetryTimeout)                {                    throw;                }                fileIORetryTimer.SleepUntilNextRetry();            }        }    }    public void Foo()    {        this.RetryFileIO(FileDeleteOperation, "L:\file.to.delete" );        this.RetryFileIO(FileCopyOperation, "L:\file.to.copy.source", "L:\file.to.copy.destination" );    }
+
+----------------------------------------
+On Linux:
+
+
+set raw mode
+select and read the keystroke
+restore normal settings
+
+
+
+import sys
+import select
+import termios
+import tty
+
+def getkey():
+    old_settings = termios.tcgetattr(sys.stdin)
+    tty.setraw(sys.stdin.fileno())
+    select.select([sys.stdin], [], [], 0);
+    answer = sys.stdin.read(1);
+    termios.tcsetattr(sys.stdin, termios.TCSADRAIN, old_settings);
+    return answer
+
+print ""Menu
+1) Say Foo
+2) Say Bar"
+
+answer=getkey()
+
+if "1" in answer: print "foo"
+elif "2" in answer: print "bar"
+
+----------------------------------------
+
+for C# 3.5
+
+without notifyicon therefore you will need to terminate this application in task manager manually
+
+using System;using System.Drawing;using System.Windows.Forms;static class Program{    static void Main()    {        Timer timer = new Timer();        // timer.Interval = 4 minutes        timer.Interval = (int)(TimeSpan.TicksPerMinute * 4 / TimeSpan.TicksPerMillisecond);        timer.Tick += (sender, args) =&gt; { Cursor.Position = new Point(Cursor.Position.X + 1, Cursor.Position.Y + 1); };        timer.Start();        Application.Run();    }}
+
+----------------------------------------
+Something like this should work (though, you will want to change the interval).
+
+public Form1()
+{
+    InitializeComponent();
+    Timer Every4Minutes = new Timer();
+    Every4Minutes.Interval = 10;
+    Every4Minutes.Tick += new EventHandler(MoveNow);
+    Every4Minutes.Start();
+}
+
+void MoveNow(object sender, EventArgs e)
+{
+    Cursor.Position = new Point(Cursor.Position.X - 1, Cursor.Position.Y - 1);
+}
+----------------------------------------
+
+On Windows:
+
+import msvcrt
+answer=msvcrt.getch();
+
+----------------------------------------
+Wow, that took forever. Ok, here's what I've ended up with 
+
+#!C:\python25\python.exeimport msvcrtprint """Menu1) Say Foo 2) Say Bar"""while 1:    char = msvcrt.getch()    if char == chr(27): #escape        break    if char == "1":        print "foo"        break    if char == "2":        print "Bar"        break
+
+It fails hard using IDLE, the python...thing...that comes with python. But once I tried it in DOS (er, CMD.exe), as a real program, then it ran fine.
+
+No one try it in IDLE, unless you have Task Manager handy.
+
+I've already forgotten how I lived with menus that arn't super-instant responsive.
+
+----------------------------------------
+Try putting the extra text inside the server-side script block and concatenating.
+
+onclick='&lt;%# "ToggleDisplay(""" &amp;  DataBinder.Eval(Container.DataItem, "JobCode") &amp; """);" %&gt;'
+
+Edit: I'm pretty sure you could just use double quotes outside the script block as well.
+
+----------------------------------------
+I had recently similar problem and the only way to solve it was to use plain old HTML codes for single (&amp;#39;) and double quotes (&amp;#34;).  
+
+Source code was total mess of course but it worked.
+
+Try
+
+&lt;a id="aShowHide" onclick='ToggleDisplay(&amp;#34;&lt;%# DataBinder.Eval(Container.DataItem, "JobCode") %&gt;&amp;#34;);'&gt;Show/Hide&lt;/a&gt;
+
+
+or
+
+&lt;a id="aShowHide" onclick='ToggleDisplay(&amp;#39;&lt;%# DataBinder.Eval(Container.DataItem, "JobCode") %&gt;&amp;#39;);'&gt;Show/Hide&lt;/a&gt;
+
+----------------------------------------
+The solution is to use the TempData property to store the desired Request components.
+
+For instance:
+
+public ActionResult Send()
+{
+    TempData["form"] = Request.Form;
+    return this.RedirectToAction(a =&gt; a.Form());
+}
+
+
+Then in your "Form" action you can go:
+
+public ActionResult Form()
+{
+    /* Declare viewData etc. */
+
+    if (TempData["form"] != null)
+    {
+        /* Cast TempData["form"] to 
+        System.Collections.Specialized.NameValueCollection 
+        and use it */
+    }
+
+    return View("Form", viewData);
+}
+
+----------------------------------------
+You should be able to do something like:
+
+if (control.InvokeRequired){    control.Invoke(delegateWithMyCode);}else{    delegateWithMyCode();}
+
+InvokeRequired is a property on Controls to see if you are on the correct thread, then Invoke will invoke the delegate on the correct thread.
+
+UPDATE: Actually, at my last job we did something like this:
+
+private void SomeEventHandler(Object someParam){    if (this.InvokeRequired)    {        this.Invoke(new SomeEventHandlerDelegate(SomeEventHandler), someParam);    }    // Regular handling code}
+
+which removes the need for the else block and kind of tightens up the code.
+
+
+----------------------------------------
+If the thread call is "illegal" (i.e. the DataBind call affects controls that were not created in the thread it is being called from) then you need to create a delegate so that even if the decision / preparation for the DataBind is not done in the control-creating thread, any resultant modification of them (i.e. DataBind()) will be.
+
+You would call my code from the worker thread like so:
+
+this.BindData.Invoke();
+
+This would then cause the original thread to do the binding, which (presuming it is the thread that created the controls) should work.
+
+----------------------------------------
+You could always try the Synth look &amp; feel. You provide an xml file that acts as a sort of stylesheet, along with any images you want to use. The code might look like this:
+
+try {
+    SynthLookAndFeel synth = new SynthLookAndFeel();
+    Class aClass = MainFrame.class;
+    InputStream stream = aClass.getResourceAsStream("\\default.xml");
+
+    if (stream == null) {
+        System.err.println("Missing configuration file");
+        System.exit(-1);                
+    }
+
+    synth.load(stream, aClass);
+
+    UIManager.setLookAndFeel(synth);
+} catch (ParseException pe) {
+    System.err.println("Bad configuration file");
+    pe.printStackTrace();
+    System.exit(-2);
+} catch (UnsupportedLookAndFeelException ulfe) {
+    System.err.println("Old JRE in use. Get a new one");
+    System.exit(-3);
+}
+
+
+From there, go on and add your JButton like you normally would. The only change is that you use the setName(string) method to identify what the button should map to in the xml file.
+
+The xml file might look like this:
+
+&lt;synth&gt;
+    &lt;style id="button"&gt;
+        &lt;font name="DIALOG" size="12" style="BOLD"/&gt;
+        &lt;state value="MOUSE_OVER"&gt;
+            &lt;imagePainter method="buttonBackground" path="dirt.png" sourceInsets="2 2 2 2"/&gt;
+            &lt;insets top="2" botton="2" right="2" left="2"/&gt;
+        &lt;/state&gt;
+        &lt;state value="ENABLED"&gt;
+            &lt;imagePainter method="buttonBackground" path="dirt.png" sourceInsets="2 2 2 2"/&gt;
+            &lt;insets top="2" botton="2" right="2" left="2"/&gt;
+        &lt;/state&gt;
+    &lt;/style&gt;
+    &lt;bind style="button" type="name" key="dirt"/&gt;
+&lt;/synth&gt;
+
+
+The bind element there specifies what to map to (in this example, it will apply that styling to any buttons whose name property has been set to "dirt").
+
+And a couple of useful links:
+
+http://javadesktop.org/articles/synth/
+
+http://docs.oracle.com/javase/tutorial/uiswing/lookandfeel/synth.html
+
+----------------------------------------
+Quick'n Dirty:
+
+First create your ConfigurationSection and ConfigurationElement classes:
+
+public class MyStuffSection : ConfigurationSection
+{
+    ConfigurationProperty _MyStuffElement;
+
+    public MyStuffSection()
+    {
+        _MyStuffElement = new ConfigurationProperty("MyStuff", typeof(MyStuffElement), null);
+
+        this.Properties.Add(_MyStuffElement);
+    }
+
+    public MyStuffElement MyStuff
+    {
+        get
+        {
+            return this[_MyStuffElement] as MyStuffElement;
+        }
+    }
+}
+
+public class MyStuffElement : ConfigurationElement
+{
+    ConfigurationProperty _SomeStuff;
+
+    public MyStuffElement()
+    {
+        _SomeStuff = new ConfigurationProperty("SomeStuff", typeof(string), "&lt;UNDEFINED&gt;");
+
+        this.Properties.Add(_SomeStuff);
+    }
+
+    public string SomeStuff
+    {
+        get
+        {
+            return (String)this[_SomeStuff];
+        }
+    }
+}
+
+
+Then let the framework know how to handle your configuration classes in web.config:
+
+&lt;configuration&gt;
+  &lt;configSections&gt;
+    &lt;section name="MyStuffSection" type="MyWeb.Configuration.MyStuffSection" /&gt;
+  &lt;/configSections&gt;
+  ...
+
+
+And actually add your own section below:
+
+  &lt;MyStuffSection&gt;
+    &lt;MyStuff SomeStuff="Hey There!" /&gt;
+  &lt;/MyStuffSection&gt;
+
+
+Then you can use it in your code thus:
+
+MyWeb.Configuration.MyStuffSection configSection = ConfigurationManager.GetSection("MyStuffSection") as MyWeb.Configuration.MyStuffSection;
+
+if (configSection != null &amp;&amp; configSection.MyStuff != null)
+{
+    Response.Write(configSection.MyStuff.SomeStuff);
+}
+
+----------------------------------------
+
+Yes, this is possible. One of the main pros for using Swing is the ease with which the abstract controls can be created and manipulates.
+
+Here is a quick and dirty way to extend the existing JButton class to draw a circle to the right of the text.
+
+package test;
+
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Graphics;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class MyButton extends JButton {
+
+    private static final long serialVersionUID = 1L;
+
+    private Color circleColor = Color.BLACK;
+
+    public MyButton(String label) {
+        super(label);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        Dimension originalSize = super.getPreferredSize();
+        int gap = (int) (originalSize.height * 0.2);
+        int x = originalSize.width + gap;
+        int y = gap;
+        int diameter = originalSize.height - (gap * 2);
+
+        g.setColor(circleColor);
+        g.fillOval(x, y, diameter, diameter);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        Dimension size = super.getPreferredSize();
+        size.width += size.height;
+        return size;
+    }
+
+    /*Test the button*/
+    public static void main(String[] args) {
+        MyButton button = new MyButton("Hello, World!");
+
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 400);
+
+        Container contentPane = frame.getContentPane();
+        contentPane.setLayout(new FlowLayout());
+        contentPane.add(button);
+
+        frame.setVisible(true);
+    }
+
+}
+
+
+Note that by overriding paintComponent that the contents of the button can be changed, but that the border is painted by the paintBorder method. The getPreferredSize method also needs to be managed in order to dynamically support changes to the content. Care needs to be taken when measuring font metrics and image dimensions.
+
+For creating a control that you can rely on, the above code is not the correct approach. Dimensions and colours are dynamic in Swing and are dependent on the look and feel being used. Even the default Metal look has changed across JRE versions. It would be better to implement AbstractButton and conform to the guidelines set out by the Swing API. A good starting point is to look at the javax.swing.LookAndFeel and javax.swing.UIManager classes.
+
+http://docs.oracle.com/javase/8/docs/api/javax/swing/LookAndFeel.html
+
+http://docs.oracle.com/javase/8/docs/api/javax/swing/UIManager.html
+
+Understanding the anatomy of LookAndFeel is useful for writing controls:
+Creating a Custom Look and Feel
+
+----------------------------------------
+If you need to populate each member variable by hand you can generalize it a bit as far as the primitives are concerned by using FormatterServices to retrieve in order the list of variable types associated with an object. I've had to do this in a project where I had a lot of different message types coming off the stream and I definitely didn't want to write the serializer/deserializer for each message. 
+
+Here's the code I used to generalize the deserialization from a byte[].
+
+public virtual bool SetMessageBytes(byte[] message)    {        MemberInfo[] members = FormatterServices.GetSerializableMembers(this.GetType());        object[] values = FormatterServices.GetObjectData(this, members);        int j = 0;        for (int i = 0; i &lt; members.Length; i++)        {            string[] var = members[i].ToString().Split(new char[] { ' ' });            switch (var[0])            {                case "UInt32":                    values[i] = (UInt32)((message[j] &lt;&lt; 24) + (message[j + 1] &lt;&lt; 16) + (message[j + 2] &lt;&lt; 8) + message[j + 3]);                    j += 4;                    break;                case "UInt16":                    values[i] = (UInt16)((message[j] &lt;&lt; 8) + message[j + 1]);                    j += 2;                    break;                case "Byte":                    values[i] = (byte)message[j++];                    break;                case "UInt32[]":                    if (values[i] != null)                    {                        int len = ((UInt32[])values[i]).Length;                        byte[] b = new byte[len * 4];                        Array.Copy(message, j, b, 0, len * 4);                        Array.Copy(Utilities.ByteArrayToUInt32Array(b), (UInt32[])values[i], len);                        j += len * 4;                    }                    break;                case "Byte[]":                    if (values[i] != null)                    {                        int len = ((byte[])values[i]).Length;                        Array.Copy(message, j, (byte[])(values[i]), 0, len);                        j += len;                    }                    break;                default:                    throw new Exception("ByteExtractable::SetMessageBytes Unsupported Type: " + var[1] + " is of type " +  var[0]);            }        }        FormatterServices.PopulateObjectMembers(this, members, values);        return true;    }
+
+----------------------------------------
+This is an alternative way (DataReader is faster than this one):
+
+string s = "";SqlConnection conn = new SqlConnection("Server=192.168.1.1;Database=master;Connect Timeout=30;User ID=foobar;Password=raboof;");SqlDataAdapter da = new SqlDataAdapter("SELECT TOP 5 name, dbid FROM sysdatabases", conn);DataTable dt = new DataTable();da.Fill(dt);for (int i = 0; i &lt; dt.Rows.Count; i++){    s += dt.Rows[i]["name"].ToString() + " -- " + dt.Rows[i]["dbid"].ToString() + "\n";}MessageBox.Show(s);
+
+----------------------------------------
+I have found the solution else where:
+
+SELECT SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('MD5', 'HelloWorld')), 3, 32) 
+
+----------------------------------------
+
+Try this:
+
+using (FileStream stream = new FileStream(fileName, FileMode.Open)){    BinaryFormatter formatter = new BinaryFormatter();    StructType aStruct = (StructType)formatter.Deserialize(filestream);}
+
+----------------------------------------
+I don't see any problem with your code.
+
+just out of my head, what if you try to do it manually? does it work?
+
+BinaryReader reader = new BinaryReader(stream);StructType o = new StructType();o.FileDate = Encoding.ASCII.GetString(reader.ReadBytes(8));o.FileTime = Encoding.ASCII.GetString(reader.ReadBytes(8));.........
+
+also try
+
+StructType o = new StructType();byte[] buffer = new byte[Marshal.SizeOf(typeof(StructType))];GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);Marshal.StructureToPtr(o, handle.AddrOfPinnedObject(), false);handle.Free();
+
+then use buffer[] in your BinaryReader instead of reading data from FileStream to see whether you still get AccessViolation exception.
+
+
+  I had no luck using the
+  BinaryFormatter, I guess I have to
+  have a complete struct that matches
+  the content of the file exactly.
+
+
+That makes sense, BinaryFormatter has its own data format, completely incompatible with yours.
+
+----------------------------------------
+Most people use .NET serialization (there is faster binary and slower XML formatter, they both depend on reflection and are version tolerant to certain degree)
+
+However, if you want the fastest (unsafe) way - why not:
+
+Writing:
+
+YourStruct o = new YourStruct();
+byte[] buffer = new byte[Marshal.SizeOf(typeof(YourStruct))];
+GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+Marshal.StructureToPtr(o, handle.AddrOfPinnedObject(), false);
+handle.Free();
+
+
+Reading:
+
+handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
+o = (YourStruct)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(YourStruct));
+handle.Free();
+
+----------------------------------------
+
+You can add a mouse click event to the TreeView, then select the correct node using GetNodeAt given the mouse coordinates provided by the MouseEventArgs.
+
+void treeView1MouseUp(object sender, MouseEventArgs e)
+{
+    if(e.Button == MouseButtons.Right)
+    {
+        // Select the clicked node
+        treeView1.SelectedNode = treeView1.GetNodeAt(e.X, e.Y);
+
+        if(treeView1.SelectedNode != null)
+        {
+            myContextMenuStrip.Show(treeView1, e.Location);
+        }
+    }
+}
+
+
+----------------------------------------
+Using attributes, child config sections and constraints
+
+There is also the possibility to use attributes which automatically takes care of the plumbing, as well as providing the ability to easily add constraints.
+
+I here present an example from code I use myself in one of my sites. With a constraint I dictate the maximum amount of disk space any one user is allowed to use.
+
+MailCenterConfiguration.cs:
+
+namespace Ani {
+
+    public sealed class MailCenterConfiguration : ConfigurationSection
+    {
+        [ConfigurationProperty("userDiskSpace", IsRequired = true)]
+        [IntegerValidator(MinValue = 0, MaxValue = 1000000)]
+        public int UserDiskSpace
+        {
+            get { return (int)base["userDiskSpace"]; }
+            set { base["userDiskSpace"] = value; }
+        }
+    }
+}
+
+
+This is set up in web.config like so
+
+&lt;configSections&gt;
+    &lt;!-- Mailcenter configuration file --&gt;
+    &lt;section name="mailCenter" type="Ani.MailCenterConfiguration" requirePermission="false"/&gt;
+&lt;/configSections&gt;
+...
+&lt;mailCenter userDiskSpace="25000"&gt;
+    &lt;mail
+     host="my.hostname.com"
+     port="366" /&gt;
+&lt;/mailCenter&gt;
+
+
+Child elements
+
+The child xml element mail is created created in the same .cs file as the one above. Here I've added constraints on the port. If the port is assigned a value not in this range the runtime will complain when the config is loaded.
+
+MailCenterConfiguration.cs:
+
+public sealed class MailCenterConfiguration : ConfigurationSection
+{
+    [ConfigurationProperty("mail", IsRequired=true)]
+    public MailElement Mail
+    {
+        get { return (MailElement)base["mail"]; }
+        set { base["mail"] = value; }
+    }
+
+    public class MailElement : ConfigurationElement
+    {
+        [ConfigurationProperty("host", IsRequired = true)]
+        public string Host
+        {
+            get { return (string)base["host"]; }
+            set { base["host"] = value; }
+        }
+
+        [ConfigurationProperty("port", IsRequired = true)]
+        [IntegerValidator(MinValue = 0, MaxValue = 65535)]
+        public int Port
+        {
+            get { return (int)base["port"]; }
+            set { base["port"] = value; }
+        }
+
+
+Use
+
+To then use it practically in code, all you have to do is instantiate the MailCenterConfigurationObject, this will automatically read the relevant sections from web.config.
+
+MailCenterConfiguration.cs
+
+private static MailCenterConfiguration instance = null;
+public static MailCenterConfiguration Instance
+{
+    get
+    {
+        if (instance == null)
+        {
+            instance = (MailCenterConfiguration)WebConfigurationManager.GetSection("mailCenter");
+        }
+
+        return instance;
+    }
+}
+
+
+AnotherFile.cs
+
+public void SendMail()
+{
+    MailCenterConfiguration conf = MailCenterConfiguration.Instance;
+    SmtpClient smtpClient = new SmtpClient(conf.Mail.Host, conf.Mail.Port);
+}
+
+
+Check for validity
+
+I previously mentioned that the runtime will complain when the configuration is loaded and some data does not comply to the rules you have set up (e.g. in MailCenterConfiguration.cs). I tend to want to know these things as soon as possible when my site fires up. One way to solve this is load the configuration in _Global.asax.cx.Application_Start_ , if the configuration is invalid you will be notified of this with the means of an exception. Your site won't start and instead you will be presented detailed exception information in the Yellow screen of death.
+
+Global.asax.cs
+
+protected void Application_ Start(object sender, EventArgs e)
+{
+    MailCenterConfiguration.Instance;
+}
+
+----------------------------------------
+
+I had no luck using the BinaryFormatter, I guess I have to have a complete struct that matches the content of the file exactly. I realised that in the end I wasn't interested in very much of the file content anyway so I went with the solution of reading part of stream into a bytebuffer and then converting it using
+
+Encoding.ASCII.GetString()
+
+
+for strings and
+
+BitConverter.ToInt32();
+
+
+for the integers
+
+I will need to be able to parse more of the file later on but for this version I got away with just a couple of lines of code.
+
+----------------------------------------
+AdBlock forum says this is used to detect AdBlock. After some tweaking you could use this to gather some statistics.
+
+&lt;script language="JavaScript" type="text/JavaScript"&gt;setTimeout('detect_abp()', 10000);var isFF = (navigator.userAgent.indexOf("Firefox") &gt; -1) ? true : false;var hasABP = false;function detect_abp(){   if(isFF)   {         if(Components.interfaces.nsIAdblockPlus != undefined)        {           hasABP = true;        }        else        {          var AbpImage = document.createElement("IMG");          AbpImage.id = 'abp_detector';          AbpImage.src = '/textlink-ads.jpg';            AbpImage.style.width = '0px';          AbpImage.style.height = '0px';          AbpImage.style.top = '-1000px';          AbpImage.style.left = '-1000px';          document.body.appendChild(AbpImage);          hasABP = (document.getElementById('abp_detector').style.display == 'none');             var e = document.getElementsByTagName("iframe");            for (var i = 0; i &lt; e.length; i++)            {               if(e[i].clientHeight == 0)                {                    hasABP = true;                }            }              if(hasABP == true)              {               history.go(1);                location = "http://www.tweaktown.com/supportus.html";              window.location(location);                    } 
+
+----------------------------------------
+Try the following
+
+var names = (from dr in dataTable.Rows
+             select (string)dr["Name"]).Distinct().OrderBy(name =&gt; name);
+
+
+this should work for what you need.
+
+----------------------------------------
+A few months back I wrote a blog post about  Fluent Interfaces and LINQ which used an Extension Method on IQueryable&lt;T&gt; and another class to provide the following natural way of paginating a LINQ collection.
+
+var query = from i in ideas
+            select i;
+var pagedCollection = query.InPagesOf(10);
+var pageOfIdeas = pagedCollection.Page(2);
+
+
+You can get the code from the MSDN Code Gallery Page: Pipelines, Filters, Fluent API and LINQ to SQL.
+
+----------------------------------------
+You'll get different results for the different methods depending on whether you compile with optimisations on. You basically have a few options:
+
+object o;
+
+//checking with is
+o is int
+
+//check type
+o.GetType() != typeof( int )
+
+//cast and catch exception
+try{ int j = (int) o; } 
+catch {}
+
+//use the tryparse
+int.TryParse( Convert.ToString( o ), out j );
+
+
+You cn easily set up a console app that tries each of these 10,000 times and returns durations for each (test when o is an int and when it's something else).
+
+The try-catch method is the quickest if the object does hold an int, and by far the slowest if it doesn't (even slower than GetType).  int.TryParse is pretty quick if you have a string, but if you have an unknown object it's slower.
+
+Interestingly, with .Net 3.5 and optimisations turned on the o is int check takes the same time as try-catch when o actually is an int. o is int is only slightly slower if o actually is something else.
+
+Annoyingly FxCop will throw up warnings if you do something like:
+
+if( o is int )
+    int j = (int) o;
+
+
+But I think that's a bug in FxCop - it doesn't know int is a value type and recommends you to use o as int instead.
+
+If your input is always a string int.TryParse is best, otherwise the is operator is quickest.
+
+As you have a string I'd look at whether you need to know that it's an int, rather than a double.  If int.TryParse passes then so will double.TryParse so you could half the number of checks - return either double or string and floor the doubles when you expect an int.
+
+
+----------------------------------------
+Something like this?
+
+dim cars(2),x
+cars(0)="Volvo"
+cars(1)="Saab"
+cars(2)="BMW"
+
+For Each x in cars
+  response.write(x &amp; "&lt;br /&gt;");
+Next
+
+
+See www.w3schools.com
+
+If you want to associate keys and values use a dictionary object instead:
+
+Dim objDictionary
+Set objDictionary = CreateObject("Scripting.Dictionary")
+objDictionary.Add "Name", "Scott"
+objDictionary.Add "Age", "20"
+if objDictionary.Exists("Name") then
+    ' Do something
+else
+    ' Do something else 
+end if
+
+----------------------------------------
+
+In our rails app I have a secret (unpulished url, restricted to a certain class of authenticated user) action which literally does this
+
+render :text =&gt; `svn info #{RAILS_ROOT}`
+
+
+(this is the equivalent of Process.Start( "svn info..." ) if you're only familiar with .net)
+
+If I'm wondering if the guy who manages the servers has updated the site recently, I can hit this URL, and have a look
+
+----------------------------------------
+I just looked at the AIR SQL API, and there's an attach method on SQLConnection it looks exactly what you need.
+
+I haven't tested this, but according to the documentation it should work:
+
+var connection : SQLConnection = new SQLConnection();
+
+connection.open(firstDbFile);
+connection.attach(secondDbFile, "otherDb");
+
+var statement : SQLStatement = new SQLStatement();
+
+statement.connection = connection;
+statement.text = "INSERT INTO main.myTable SELECT * FROM otherDb.myTable";
+statement.execute();
+
+
+There may be errors in that code snipplet, I haven't worked much with the AIR SQL API lately. Notice that the tables of the database opened with open are available using main.tableName, any attached database can be given any name at all (otherDb in the example above).
+
+----------------------------------------
+
+As mentioned in the question, IEnumerable has a CopyToDataTable method:
+
+IEnumerable&lt;DataRow&gt; query =
+    from order in orders.AsEnumerable();
+    where order.Field&lt;DateTime&gt;("OrderDate") &gt; new DateTime(2001, 8, 1)
+    select order;
+
+// Create a table from the query
+DataTable boundTable = query.CopyToDataTable&lt;DataRow&gt;();
+
+
+Why won't that work for you?
+
+----------------------------------------
+The "correct" way to do this is to respond to the WM_SYSCOMMAND message. In C# this looks something like this:
+
+protected override void WndProc(ref Message m)
+{
+    // Abort screensaver and monitor power-down
+    const int WM_SYSCOMMAND = 0x0112;
+    const int SC_MONITOR_POWER = 0xF170;
+    const int SC_SCREENSAVE = 0xF140;
+    int WParam = (m.WParam.ToInt32() &amp; 0xFFF0);
+
+    if (m.Msg == WM_SYSCOMMAND &amp;&amp;
+        (WParam == SC_MONITOR_POWER || WParam == SC_SCREENSAVE)) return;
+
+    base.WndProc(ref m);
+}
+
+
+According to MSDN, if the screensaver password is enabled by policy on Vista or above, this won't work. Presumably programmatically moving the mouse is also ignored, though I have not tested this.
+
+----------------------------------------
+
+There is another way which avoids tempdata. The pattern I like involves creating 1 action for both the original render and re-render of the invalid form. It goes something like this:
+
+var form = new FooForm();
+
+if (request.UrlReferrer == request.Url)
+{
+     // Fill form with previous request's data
+}
+
+if (Request.IsPost())
+{
+     if (!form.IsValid)
+     {
+         ViewData["ValidationErrors"] = ...
+     } else {
+         // update model
+         model.something = foo.something;
+         // handoff to post update action
+         return RedirectToAction("ModelUpdated", ... etc);
+     }
+}
+
+// By default render 1 view until form is a valid post
+ViewData["Form"] = form;
+return View();
+
+
+That's the pattern more or less. A little pseudoy. With this you can create 1 view to handle rendering the form, re-displaying the values (since the form will be filled with previous values), and showing error messages.
+
+When the posting to this action, if its valid it transfers control over to another action.
+
+I'm trying to make this pattern easy in the .net validation framework as we build out support for MVC.
+
+----------------------------------------
+There's a couple of small cleanups you can make...
+
+package
+{
+    import flash.filesystem.File;
+
+    public class UserUtil
+    {
+        public static function get currentOSUser():String
+        {
+            var userDir:String = File.userDirectory.nativePath;
+            var userName:String = userDir.substr(userDir.lastIndexOf(File.separator) + 1);
+            return userName;
+        }
+    }
+}
+
+
+As Kevin suggested, use File.separator to make the directory splitting cross-platform (just tested on Windows and Mac OS X).
+
+You don't need to use resolvePath("") unless you're looking for a child.
+
+Also, making the function a proper getter allows binding without any further work.
+
+In the above example I put it into a UserUtil class, now I can bind to UserUtil.currentOSUser, e.g:
+
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;mx:WindowedApplication xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"&gt;
+    &lt;mx:Label text="{UserUtil.currentOSUser}"/&gt; 
+&lt;/mx:WindowedApplication&gt;
+
+----------------------------------------
+This isn't a full answer for you, but on the left join piece you can use the DefaultIfEmpty operator like so:
+
+var collection = 
+from u in db.Universe
+join history in db.History on u.id = history.id into temp
+from h in temp.DefaultIfEmpty()
+where h.dateCol &lt; DateTime.Now.Date.AddDays(-1);
+select u.id, u.name, h.dateCol ?? '1900-01-01'
+
+
+I havent had the need to do any groupby commands yet, so I left that out as to not send you down the wrong path.  Two other quick things to note.  I have been unable to actually join on two parameters although as above there are ways to get around it.  Also, the ?? operator works really well in place of the isnull in SQL.
+
+----------------------------------------
+
+If you are intending on reading a large number of columns or records it's also worth caching the ordinals and accessing the strongly-typed methods, e.g.
+
+using (DbDataReader dr = cmd.ExecuteReader()) {
+  if (dr.Read()) {
+    int idxColumnName = dr.GetOrdinal("columnName");
+    int idxSomethingElse = dr.GetOrdinal("somethingElse");
+
+    do {
+      Console.WriteLine(dr.GetString(idxColumnName));
+      Console.WriteLine(dr.GetInt32(idxSomethingElse));
+    } while (dr.Read());
+  }
+}
+
+----------------------------------------
+The closest you are going to get is using a Dictionary (as mentioned by Pacifika)
+
+Dim objDictionary
+Set objDictionary = CreateObject("Scripting.Dictionary")
+objDictionary.CompareMode = vbTextCompare 'makes the keys case insensitive'
+objDictionary.Add "Name", "Scott"
+objDictionary.Add "Age", "20"
+
+
+But I loop through my dictionaries like a collection
+
+For Each Entry In objDictionary
+  Response.write objDictionary(Entry) &amp; "&lt;br /&gt;"
+Next
+
+
+You can loop through the entire dictionary this way writing out the values which would look like this:
+
+Scott
+20
+
+
+You can also do this
+
+For Each Entry In objDictionary
+  Response.write Entry &amp; ": " &amp; objDictionary(Entry) &amp; "&lt;br /&gt;"
+Next
+
+
+Which would produce
+
+ Name: Scott
+ Age: 20
+
+----------------------------------------
+
+You're going to want to use the join into construct to create a group query.
+
+TestContext db = new TestContext(CreateSparqlTripleStore());
+var q = from a in db.Album
+        join t in db.Track on a.Name equals t.AlbumName into tracks
+        select new Album{Name = a.Name, Tracks = tracks};
+foreach(var album in q){
+    Console.WriteLine(album.Name);
+    foreach (Track track in album.Tracks)
+    {
+        Console.WriteLine(track.Title);
+    }
+}
+
+----------------------------------------
+Unhandled exception behavior in a .NET 1.x WinForms app depends on:
+
+
+The type of thread that threw the exception
+Whether it occurred during window message processing
+Whether a debugger was attached to the process
+The DbgJitDebugLaunchSetting registry setting
+The jitDebugging flag in App.Config
+Whether you overrode the WinForms exception handler
+Whether you handled the exception event
+The phase of the moon
+
+
+The default behaviour of unhandled exceptions is:
+
+
+If the exception occurs on the main thread when pumping window messages, it's intercepted by the Windows Forms exception handler.
+If the exception occurs on the main thread when pumping window messages, it will terminate the app process unless it's intercepted by the Windows Forms exception handler.
+If the exception occurs on a manual, threadpool, or finalizer thread, it's swallowed by the CLR.
+
+
+The points of contact for an unhandled exception are: 
+
+
+Windows Forms exception handler.
+The JIT-debug registry switch DbgJitDebugLaunchSetting.
+The CLR unhandled exception event.
+
+
+The Windows Form built-in exception handling does the following by default:
+
+
+Catches an unhandled exception when:
+
+exception is on main thread and no debugger attached.
+exception occurs during window message processing.
+jitDebugging = false in App.Config.
+
+Shows dialog to user and prevents app termination.
+
+
+You can disable the latter behaviour by setting jitDebugging = true in App.Config. But remember that this may be your last chance to stop app termination. So the next step to catch an unhandled exception is registering for event Application.ThreadException, e.g. :
+
+Application.ThreadException += new
+Threading.ThreadExceptionHandler(CatchFormsExceptions);
+
+
+Note the registry setting DbgJitDebugLaunchSetting under HKEY_LOCAL_MACHINE\Software.NetFramework. This has one of three values of which I'm aware:
+
+
+0: shows user dialog asking "debug or terminate".
+1: lets exception through for CLR to deal with.
+2: launches debugger specified in DbgManagedDebugger registry key.
+
+
+In Visual Studio, go to Tools>Options>Debugging>JIT to set this key to 0 or 2. But a value of 1 is usually best on an end-user's machine. Note that this registry key is acted on before the CLR unhandled exception event.
+
+This last event is your last chance to log an unhandled exception. It's triggered before your Finally blocks have executed. You can intercept this event as follows:
+
+AppDomain.CurrentDomain.UnhandledException += new
+System.UnhandledExceptionEventHandler(CatchClrExceptions);
+
+----------------------------------------
+
+There must be a method in Cocoa to get a list of fonts, then you would have to use the PyObjC bindings to call it..
+
+Depending on what you need them for, you could probably just use something like the following..
+
+import os
+def get_font_list():
+    fonts = []
+    for font_path in ["/Library/Fonts", os.path.expanduser("~/Library/Fonts")]:
+        if os.path.isdir(font_path):
+            fonts.extend(
+                [os.path.join(font_path, cur_font) 
+                 for cur_font in os.listdir(font_path);
+                ]
+            )
+    return fonts
+---------------------------------------
+I would recommend that you pull up the C5 Library.  Unlike SCG (System.Collections.Generic), C5 is programmed to interface and designed to be subclassed.  Most public methods are virtual and none of the classes are sealed.  This way, you won't have to use that icky "new" keyword which wouldn't trigger if your LimitedQueue&lt;T&gt; were cast to a SCG.Queue&lt;T&gt;.  With C5 and using close to the same code as you had before, you would derive from the CircularQueue&lt;T&gt;.  The CircularQueue&lt;T&gt; actually implements both a stack and a queue, so you can get both options with a limit nearly for free.  I've rewritten it below with some 3.5 constructs:
+
+using C5;
+
+public class LimitedQueue&lt;T&gt; : CircularQueue&lt;T&gt;
+{
+    public int Limit { get; set; }
+
+    public LimitedQueue(int limit) : base(limit)
+    {
+        this.Limit = limit;
+    }
+
+    public override void Push(T item)
+    {
+        CheckLimit(false);
+        base.Push(item);
+    }
+
+    public override void Enqueue(T item)
+    {
+        CheckLimit(true);
+        base.Enqueue(item);
+    }
+
+    protected virtual void CheckLimit(bool enqueue)
+    {
+        while (this.Count &gt;= this.Limit)
+        {
+            if (enqueue)
+            {
+                this.Dequeue();
+            }
+            else
+            {
+                this.Pop();
+            }
+        }
+    }
+}
+
+
+I think that this code should do exactly what you were looking for.
+
+----------------------------------------
+We have a simple utility class in-house for our database calls (a light wrapper around ADO.NET), but I am thinking of creating classes for each database/object.  Would it be smart thing to do so, or would it only benefit if we were using the full MVC framework for ASP.NET?
+
+So we have this:
+
+SQLWrapper.GetRecordset(connstr-alias, sql-statement, parameters);
+SQLWrapper.GetDataset(connstr-alias, sql-statement, parameters);
+SQLWrapper.Execute(connstr-alias, sql-statement, parameters);
+
+
+Thinking of doing this:
+
+Person p = Person.get(id);
+p.fname = "jon";
+p.lname = "smith";
+p.Save();
+
+
+or for a new record -
+
+Person p = new Person();
+p.fname = "Jon";
+p.lname = "Smith";
+p.Save();
+p.Delete();
+
+
+Would this be smart, or would it be overkill? I can see the benefit for reuse, changing database, and maintenance/readability.
+
+----------------------------------------
+What would be the best way to fill a C# struct from a byte[] array where the data was from a C/C++ struct?  The C struct would look something like this (my C is very rusty):
+
+typedef OldStuff {
+    CHAR Name[8];
+    UInt32 User;
+    CHAR Location[8];
+    UInt32 TimeStamp;
+    UInt32 Sequence;
+    CHAR Tracking[16];
+    CHAR Filler[12];
+}
+
+
+And would fill something like this:
+
+[StructLayout(LayoutKind.Explicit, Size = 56, Pack = 1)]
+public struct NewStuff
+{
+    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
+    [FieldOffset(0)]
+    public string Name;
+
+    [MarshalAs(UnmanagedType.U4)]
+    [FieldOffset(8)]
+    public uint User;
+
+    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 8)]
+    [FieldOffset(12)]
+    public string Location;
+
+    [MarshalAs(UnmanagedType.U4)]
+    [FieldOffset(20)]
+    public uint TimeStamp;
+
+    [MarshalAs(UnmanagedType.U4)]
+    [FieldOffset(24)]
+    public uint Sequence;
+
+    [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 16)]
+    [FieldOffset(28)]
+    public string Tracking;
+}
+
+
+What is best way to copy OldStuff to NewStuff, if OldStuff was passed as byte[] array?
+
+I'm currently doing something like the following, but it feels kind of clunky.
+
+GCHandle handle;
+NewStuff MyStuff;
+
+int BufferSize = Marshal.SizeOf(typeof(NewStuff));
+byte[] buff = new byte[BufferSize];
+
+Array.Copy(SomeByteArray, 0, buff, 0, BufferSize);
+
+handle = GCHandle.Alloc(buff, GCHandleType.Pinned);
+
+MyStuff = (NewStuff)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(NewStuff));
+
+handle.Free();
+
+
+Is there better way to accomplish this?
+
+
+
+Would using the BinaryReader class offer any performance gains over pinning the memory and using Marshal.PtrStructure?
+
+
+----------------------------------------
+I have been trying to find a really fast way to parse yyyy-mm-dd [hh:mm:ss] into a Date object. Here are the 3 ways I have tried doing it and the times it takes each method to parse 50,000 date time strings.
+
+Does anyone know any faster ways of doing this or tips to speed up the methods?
+
+castMethod1 takes 3673 ms 
+castMethod2 takes 3812 ms 
+castMethod3 takes 3931 ms
+
+
+Code:
+
+private function castMethod1(dateString:String):Date {
+    if ( dateString == null ) {
+        return null;
+    }
+
+    var year:int = int(dateString.substr(0,4));
+    var month:int = int(dateString.substr(5,2))-1;
+    var day:int = int(dateString.substr(8,2));
+
+    if ( year == 0 &amp;&amp; month == 0 &amp;&amp; day == 0 ) {
+        return null;
+    }
+
+    if ( dateString.length == 10 ) {
+        return new Date(year, month, day);
+    }
+
+    var hour:int = int(dateString.substr(11,2));
+    var minute:int = int(dateString.substr(14,2));
+    var second:int = int(dateString.substr(17,2));
+
+    return new Date(year, month, day, hour, minute, second);
+}
+
+
+-
+
+private function castMethod2(dateString:String):Date {
+    if ( dateString == null ) {
+        return null;
+    }
+
+    if ( dateString.indexOf("0000-00-00") != -1 ) {
+        return null;
+    }
+
+    dateString = dateString.split("-").join("/");
+
+    return new Date(Date.parse( dateString ));
+}
+
+
+-
+
+private function castMethod3(dateString:String):Date {
+    if ( dateString == null ) {
+        return null;
+    }
+
+    var mainParts:Array = dateString.split(" ");
+    var dateParts:Array = mainParts[0].split("-");
+
+    if ( Number(dateParts[0])+Number(dateParts[1])+Number(dateParts[2]) == 0 ) {
+        return null;
+    }
+
+    return new Date( Date.parse( dateParts.join("/")+(mainParts[1]?" "+mainParts[1]:" ") ) );
+}
+
+
+
+
+No, Date.parse will not handle dashes by default. And I need to return null for date time strings like "0000-00-00".
+
+----------------------------------------
+Since the WMI class Win32_OperatingSystem only includes OSArchitecture in Windows Vista, I quickly wrote up a method using the registry to try and determine whether or not the current system is a 32 or 64bit system.
+
+private Boolean is64BitOperatingSystem()
+{
+    RegistryKey localEnvironment = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment");
+    String processorArchitecture = (String) localEnvironment.GetValue("PROCESSOR_ARCHITECTURE");
+
+    if (processorArchitecture.Equals("x86")) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
+
+It's worked out pretty well for us so far, but I'm not sure how much I like looking through the registry. Is this a pretty standard practice or is there a better method?
+
+Edit: Wow, that code looks a lot prettier in the preview. I'll consider linking to a pastebin or something, next time.
+
+----------------------------------------
+
+
+I'd like to use a LinqDataSource control on a page and limit the amount of records returned.  I know if I use code behind I could do something like this:
+
+IEnumerable&lt;int&gt; values = Enumerable.Range(0, 10);
+IEnumerable&lt;int&gt; take3 = values.Take(3);
+
+
+Does anyone know if something like this is possible with a LinqDataSource control?
+
+[Update]
+
+I'm going to use the LinqDataSource with the ListView control, not a GridView or Repeater.  The LinqDataSource wizard does not provide the ability to limit the number of records return.  The Advanced options only allow you to enabled deletes, inserts, and updates.
+
+----------------------------------------
+How is it possible to make prototype methods in C#.Net?
+
+In JavaScript, I can do the following to create a trim method for the string object:
+
+String.prototype.trim = function() {
+    return this.replace(/^\s+|\s+$/g,"");
+}
+
+
+How can I go about doing this in C#.Net?	
+
+----------------------------------------
+I'm writing a Telnet client of sorts in C# and part of what I have to parse are ANSI/VT100 escape sequences, specifically, just those used for colour and formatting (detailed here).
+
+One method I have is one to find all the codes and remove them, so I can render the text without any formatting if needed:
+
+    
+public static string StripStringFormating(string formattedString)
+{
+    if (rTest.IsMatch(formattedString))
+        return rTest.Replace(formattedString, string.Empty);
+    else
+        return formattedString;
+}
+
+
+I'm new to regular expressions and I was suggested to use this:
+
+static Regex rText = new Regex(@"\e\[[\d;]+m", RegexOptions.Compiled);
+
+However, this failed if the escape code was incomplete due to an error on the server. So then this was suggested, but my friend warned it might be slower (this one also matches another condition (z) that I might come across later):
+
+static Regex rTest = 
+              new Regex(@"(\e(\[([\d;]*[mz]?))?)?", RegexOptions.Compiled);
+
+This not only worked, but was in fact faster to and reduced the impact on my text rendering. Can someone explain to a regexp newbie, why? :)
+
+----------------------------------------
+I am prototyping some C# 3 collection filters and came across this.
+I have a collection of products:
+
+public class MyProduct
+{
+    public string Name { get; set; }
+    public Double Price { get; set; }
+    public string Description { get; set; }
+}
+
+var MyProducts = new  List&lt;MyProduct&gt;
+{            
+    new  MyProduct
+    {
+        Name = "Surfboard",
+        Price = 144.99,
+        Description = "Most important thing you will ever own."
+    },
+    new MyProduct
+    {
+        Name = "Leash",
+        Price = 29.28,
+        Description = "Keep important things close to you."
+    }
+    ,
+    new MyProduct
+    {
+        Name = "Sun Screen",
+        Price = 15.88,
+        Description = "1000 SPF! Who Could ask for more?"
+    }
+};
+
+
+Now if I use LINQ to filter it works as expected:
+
+var d = (from mp in MyProducts
+             where mp.Price &lt; 50d
+             select mp);
+
+
+And if I use the Where extension method combined with a Lambda the filter works as well:
+
+var f = MyProducts.Where(mp =&gt; mp.Price &lt; 50d).ToList();
+
+
+Question: What is the difference, and why use one over the other?
+
+
+
+----------------------------------------
+From what I can see in that context, you don't need to copy SomeByteArray into a buffer. You simply need to get the handle from SomeByteArray, pin it, copy the IntPtr data using PtrToStructure and then release. No need for a copy.
+
+That would be:
+
+NewStuff ByteArrayToNewStuff(byte[] bytes)
+{
+    GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
+    NewStuff stuff = (NewStuff)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(NewStuff));
+    handle.Free();
+    return stuff;
+}
+
+
+Generic version:
+
+T ByteArrayToStructure&lt;T&gt;(byte[] bytes) where T: struct 
+{
+    GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
+    T stuff = (T)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
+    handle.Free();
+    return stuff;
+}
+
+----------------------------------------
+If you use JavaScript to open the popup, you can use something like this:
+
+var newWin = window.open(url);             
+
+if(!newWin || newWin.closed || typeof newWin.closed=='undefined') 
+{ 
+     //POPUP BLOCKED
+}
+
+----------------------------------------
+I'm guessing Date.Parse() doesn't work?
+
+----------------------------------------
+Well then method 2 seems the best way:
+
+private function castMethod2(dateString:String):Date {    if ( dateString == null ) {        return null;    }    if ( dateString.indexOf("0000-00-00") != -1 ) {        return null;    }    dateString = dateString.split("-").join("/");    return new Date(Date.parse( dateString ));}
+
+----------------------------------------
+Perhaps this might work:
+
+String RelativePath = AbsolutePath.Replace(Request.ServerVariables["APPL_PHYSICAL_PATH"], String.Empty);
+
+(i'm using c# but could be adapted to vb)
+
+(@Tags2k: I have editted the above answer)
+
+----------------------------------------
+// Generic function that gets all child controls of a certain type, 
+// returned in a List collection
+private static List&lt;T&gt; GetChildTextBoxes&lt;T&gt;(Control ctrl) where T : Control{
+    List&lt;T&gt; tbs = new List&lt;T&gt;();
+    foreach (Control c in ctrl.Controls) {
+        // If c is of type T, add it to the collection
+        if (c is T) { 
+            tbs.Add((T)c);
+        }
+    }
+    return tbs;
+}
+
+private static void SetChildTextBoxesHeight(Control ctrl, int height) {
+    foreach (TextBox t in GetChildTextBoxes&lt;TextBox&gt;(ctrl)) {
+        t.Height = height;
+    }
+}
+
+----------------------------------------
+Try this:
+
+var request = new XMLHttpRequest();request.overrideMimeType( 'text/xml' );request.onreadystatechange = process;request.open ( 'GET', url );request.send( null );function process() {  if ( request.readyState == 4 &amp;&amp; request.status == 200 ) 
+
+Notice the overrideMimeType and responseXML.  The readyState == 4 is 'completed'.
+
+----------------------------------------
+Try creating a div
+
+document.createElement( 'div' );
+
+And then set the tag soup HTML to the innerHTML of the div. The browser should process that into XML, which then you can parse.
+
+
+  The innerHTML property takes a string
+  that specifies a valid combination of
+  text and elements. When the innerHTML
+  property is set, the given string
+  completely replaces the existing
+  content of the object. If the string
+  contains HTML tags, the string is
+  parsed and formatted as it is placed
+  into the document.
+
+----------------------------------------
+In Ruby 1.9:
+
+weights.zip(data).map{|a,b| a*b}.reduce(:+)
+
+In Ruby 1.8:
+
+weights.zip(data).inject(0) {|sum,(w,d)| sum + w*d }
+
+----------------------------------------
+You need to create an extension method, which requires .NET 3.5. The method needs to be static, in a static class. The first parameter of the method needs to be prefixed with "this" in the signature.
+
+public static string MyMethod(this string input){    // do things}
+
+You can then call it like
+
+"asdfas".MyMethod();
+
+----------------------------------------
+You can't dynamically add methods to existing objects or classes in .NET, except by changing the source for that class.
+
+You can, however, in C# 3.0, use extension methods, which look like new methods, but are compile-time magic.
+
+To do this for your code:
+
+public static class StringExtensions{    public static String trim(this String s)    {        return s.Trim();    }}
+
+To use it:
+
+String s = "  Test  ";s = s.trim();
+
+This looks like a new method, but will compile the exact same way as this code:
+
+String s = "  Test  ";s = StringExtensions.trim(s);
+
+What exactly are you trying to accomplish? Perhaps there are better ways of doing what you want?
+
+----------------------------------------
+It sounds like you're talking about C#'s Extension Methods. You add functionality to existing classes by inserting the "this" keyword before the first parameter. The method has to be a static method in a static class. Strings in .NET already have a "Trim" method, so I'll use another example.public static class MyStringEtensions
+{
+    public static bool ContainsMabster(this string s)
+    {
+        return s.Contains("Mabster");
+    }
+}
+
+So now every string has a tremendously useful ContainsMabster method, which I can use like this:if ("Why hello there, Mabster!".ContainsMabster()) { /* ... */ }
+
+Note that you can also add extension methods to interfaces (eg IList), which means that any class implementing that interface will also pick up that new method.
+Any extra parameters you declare in the extension method (after the first "this" parameter) are treated as normal paramete
+
+----------------------------------------
+Try this:
+
+System.Configuration.ConfigurationFileMap fileMap = new ConfigurationFileMap(strConfigPath); //Path to your config fileSystem.Configuration.Configuration configuration = System.Configuration.ConfigurationManager.OpenMappedMachineConfiguration(fileMap);rs.
+
+----------------------------------------
+As mentioned d will be IEnumerable&lt;MyProduct&gt; while f is List&lt;MyProduct&gt;
+
+The conversion is done by the C# compiler
+
+var d = 
+    from mp in MyProducts
+    where mp.Price &lt; 50d
+    select mp;
+
+
+Is converted to (before compilation to IL and with generics expanded):
+
+var d = 
+    MyProducts.
+    Where&lt;MyProduct&gt;( mp =&gt; mp.Price &lt; 50d ).
+    Select&lt;MyProduct&gt;( mp =&gt; mp ); 
+    //note that this last select is optimised out if it makes no change
+
+
+Note that in this simple case it makes little difference.  Where Linq becomes really valuable is in much more complicated loops. 
+
+For instance this statement could include group-bys, orders and a few let statements and still be readable in Linq format when the equivalent .Method().Method.Method() would get complicated.
+
+----------------------------------------
+This was the fastest I could come up with after some fiddling:
+
+private function castMethod4(dateString:String):Date {    
+    if ( dateString == null ) 
+        return null;    
+    if ( dateString.length != 10 &amp;&amp; dateString.length != 19) 
+        return null;
+
+    dateString = dateString.replace("-", "/");
+    dateString = dateString.replace("-", "/");
+
+    return new Date(Date.parse( dateString ));
+}
+
+
+I get 50k iterations in about 470ms for castMethod2() on my computer and 300 ms for my version (that's the same amount of work done in 63% of the time). I'd definitely say both are "Good enough" unless you're parsing silly amounts of dates.  
+
+----------------------------------------
+I've been using the following snipplet to parse UTC date strings:
+
+private function parseUTCDate( str : String ) : Date {
+    var matches : Array = str.match(/(\d\d\d\d)-(\d\d)-(\d\d) (\d\d):(\d\d):(\d\d)Z/);
+
+    var d : Date = new Date();
+
+    d.setUTCFullYear(int(matches[1]), int(matches[2]) - 1, int(matches[3]));
+    d.setUTCHours(int(matches[4]), int(matches[5]), int(matches[6]), 0);
+
+    return d;
+}
+
+
+Just remove the time part and it should work fine for your needs:
+
+private function parseDate( str : String ) : Date {
+    var matches : Array = str.match(/(\d\d\d\d)-(\d\d)-(\d\d)/);
+
+    var d : Date = new Date();
+
+    d.setUTCFullYear(int(matches[1]), int(matches[2]) - 1, int(matches[3]));
+
+    return d;
+}
+
+
+No idea about the speed, I haven't been worried about that in my applications. 50K iterations in significantly less than a second on my machine.
+
+----------------------------------------
+Even if you capture the keydown/keyup event, those are the only events that the tab key fires, you still need some way to prevent the default action, moving to the next item in the tab order, from occurring.
+
+In Firefox you can call the preventDefault() method on the event object passed to your event handler. In IE, you have to return false from the event handle. The JQuery library provides a preventDefault method on its event object that works in IE and FF.
+
+&lt;body&gt;
+&lt;input type="text" id="myInput"&gt;
+&lt;script type="text/javascript"&gt;
+    var myInput = document.getElementById("myInput");
+    if(myInput.addEventListener ) {
+        myInput.addEventListener('keydown',this.keyHandler,false);
+    } else if(myInput.attachEvent ) {
+        myInput.attachEvent('onkeydown',this.keyHandler); /* damn IE hack */
+    }
+
+    function keyHandler(e) {
+        var TABKEY = 9;
+        if(e.keyCode == TABKEY) {
+            this.value += "    ";
+            if(e.preventDefault) {
+                e.preventDefault();
+            }
+            return false;
+        }
+    }
+&lt;/script&gt;
+&lt;/body&gt;
+
+----------------------------------------
+Do you really want to do run the regexp twice? Without having checked (bad me) I would have thought that this would work well:
+
+public static string StripStringFormating(string formattedString)
+{    
+    return rTest.Replace(formattedString, string.Empty);
+}
+
+
+If it does, you should see it run ~twice as fast...
+
+----------------------------------------
+I had this same issue. The way I got round this was to use the Selecting event on the LinqDataSource and return the result manually.
+
+e.g.
+
+protected void lnqRecentOrder_Selecting(object sender, LinqDataSourceSelectEventArgs e)
+{
+    DataClassesDataContext dx = new DataClassesDataContext();
+    e.Result = (from o in dx.Orders
+                where o.CustomerID == Int32.Parse(Request.QueryString["CustomerID"]);
+                select o).Take(5);
+}
+
+----------------------------------------
+I found this resource to be very helpfu
+
+Its a wrapper round the HttpContext.Current.GetGlobalResourceString and HttpContext.Current.GetLocalResourceString that allows you to call the resources like this...
+
+// default global resource
+Html.Resource("GlobalResource, ResourceName")
+
+// global resource with optional arguments for formatting
+Html.Resource("GlobalResource, ResourceName", "foo", "bar")
+
+//default local resource
+Html.Resource("ResourceName");
+
+/ local resource with optional arguments for formatting
+Html.Resource("ResourceName", "foo", "bar");
+
+
+The only problem I found is that controllers don't have access to local resouce strings.
+
+----------------------------------------
+I would recommend that you pull up the C5 Library.  Unlike SCG (System.Collections.Generic), C5 is programmed to interface and designed to be subclassed.  Most public methods are virtual and none of the classes are sealed.  This way, you won't have to use that icky "new" keyword which wouldn't trigger if your LimitedQueue&lt;T&gt; were cast to a SCG.Queue&lt;T&gt;.  With C5 and using close to the same code as you had before, you would derive from the CircularQueue&lt;T&gt;.  The CircularQueue&lt;T&gt; actually implements both a stack and a queue, so you can get both options with a limit nearly for free.  I've rewritten it below with some 3.5 constructs:
+
+using C5;
+
+public class LimitedQueue&lt;T&gt; : CircularQueue&lt;T&gt;
+{
+    public int Limit { get; set; }
+
+    public LimitedQueue(int limit) : base(limit)
+    {
+        this.Limit = limit;
+    }
+
+    public override void Push(T item)
+    {
+        CheckLimit(false);
+        base.Push(item);
+    }
+
+    public override void Enqueue(T item)
+    {
+        CheckLimit(true);
+        base.Enqueue(item);
+    }
+
+    protected virtual void CheckLimit(bool enqueue)
+    {
+        while (this.Count &gt;= this.Limit)
+        {
+            if (enqueue)
+            {
+                this.Dequeue();
+            }
+            else
+            {
+                this.Pop();
+            }
+        }
+    }
+}
+
+
+I think that this code should do exactly what you were looking for.
+
+----------------------------------------
+var sortedTable = (from results in resultTable.AsEnumerable();
+select (string)results[attributeList]).Distinct().OrderBy(name =&gt; name);
+
+----------------------------------------
+I find the standard windows treeview behavior selection behavior to be quite annoying. For example, if you are using Explorer and right click on a node and hit Properties, it highlights the node and shows the properties dialog for the node you clicked on. But when you return from the dialog, the highlighted node was the node previously selected/highlighted before you did the right-click. I find this causes usability problems because I am forever being confused on whether I acted on the right node.
+
+So in many of our GUIs, we change the selected tree node on a right-click so that there is no confusion. This may not be the same as a standard iwndos app like Explorer (and I tend to strongly model our GUI behavior after standard window apps for usabiltiy reasons), I believe that this one exception case results in far more usable trees.
+
+Here is some code that changes the selection during the right click:
+
+  private void tree_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+  {
+     // only need to change selected note during right-click - otherwise tree does
+     // fine by itself
+     if ( e.Button == MouseButtons.Right )
+     {         
+        Point pt = new Point( e.X, e.Y );
+        tree.PointToClient( pt );
+
+        TreeNode Node = tree.GetNodeAt( pt );
+        if ( Node != null )
+        {
+           if ( Node.Bounds.Contains( pt ) )
+           {
+              tree.SelectedNode = Node;
+              ResetContextMenu();
+              contextMenuTree.Show( tree, pt );
+           }
+        }
+     }
+  }
+
+
+----------------------------------------
+this code can be work,it is write of me:
+
+    package lib.tools
+    {
+        import flash.utils.ByteArray;
+        public class getConn
+    {
+    import flash.data.SQLConnection;
+    import flash.data.SQLStatement;
+    import flash.data.SQLResult;
+    import flash.data.SQLMode; 
+    import flash.events.SQLErrorEvent;
+    import flash.events.SQLEvent;
+    import flash.filesystem.File;
+    import mx.core.UIComponent;
+    import flash.data.SQLConnection;
+
+
+        public var Conn:SQLConnection;
+
+/*      &lt;br&gt;wirten by vivid msn:guanyangchen@126.com */
+
+        public function getConn(database:Array)
+    {       
+            Conn=new SQLConnection();
+            var Key:ByteArray=new ByteArray(); ;
+            Key.writeUTFBytes("Some16ByteString"); 
+            Conn.addEventListener(SQLErrorEvent.ERROR, createError);
+            var dbFile:File =File.applicationDirectory.resolvePath(database[0]);
+
+            Conn.open(dbFile);
+            if(database.length&gt;1){
+                for(var i:Number=1;i&lt;database.length;i++){
+                    var DBname:String=database[i]
+                    Conn.attach(DBname.split("\.")[0],File.applicationDirectory.resolvePath(DBname));
+                }
+            }
+
+/*    &lt;br&gt;wirten by vivid msn:guanyangchen@126.com */
+
+               Conn.open(dbFile, SQLMode.CREATE, false, 1024, Key); 
+
+        }
+
+/* &lt;br&gt;wirten by vivid msn:guanyangchen@126.com */
+
+        private function createError(event:SQLErrorEvent):void
+                    {
+                        trace("Error code:", event.error.details);
+                        trace("Details:", event.error.message);
+                    }
+
+/*   &lt;br&gt;wirten by vivid msn:guanyangchen@126.com */
+
+    public function Rs(sql:Array):Object{
+        var stmt:SQLStatement = new SQLStatement();
+        Conn.begin();
+        stmt.sqlConnection = Conn;
+
+
+            try{
+                for(var i:String in sql){           
+                    stmt.text = sql[i]; 
+                    stmt.execute();
+                }
+                Conn.commit();
+            }catch (error:SQLErrorEvent){
+                    createError(error);
+                    Conn.rollback();
+            };
+
+            var result:Object =stmt.getResult();
+            return result;
+        }
+
+
+
+    }
+}
+----------------------------------------
+onclick='javascript:ToggleDisplay("&lt;%# DataBinder.Eval(Container.DataItem, "JobCode")%&gt; "); '
+
+
+Use like above.
+
+----------------------------------------
+Also you could use:
+
+var amountDue = document.getElementById('&lt;%=YourControlName.ClientID%&gt;');
+
+
+That will automatically resolve the client id for the element without you having to figure out that it's called 'ctl00_footerContentHolder_Fees1_FeeDue'.
+
+----------------------------------------
+ve just spent several days procrastinating about exactly this question. There are third party products available and plenty of PERL and Python scripts but I wanted something simple and a language I was familiar with so ended up just writing hooks in a C# console app. itsvery straight forward:
+
+public void Main(string[] args)
+{
+  string repositories = args[0];
+  string transaction = args[1];
+
+  var processStartInfo = new ProcessStartInfo
+                           {
+                             FileName = "svnlook.exe",
+                             UseShellExecute = false,
+                             CreateNoWindow = true,
+                             RedirectStandardOutput = true,
+                             RedirectStandardError = true,
+                             Arguments = String.Format("log -t \"{0}\" \"{1}\"", transaction, repositories),
+                           };
+
+  var p = Process.Start(processStartInfo);
+  var s = p.StandardOutput.ReadToEnd();
+  p.WaitForExit();
+
+  if (s == string.Empty)
+  {
+    Console.Error.WriteLine("Message must be provided");
+    Environment.Exit(1);
+  }
+
+  Environment.Exit(0);
+}
+
+
+You can then invoke this on pre commit by adding a pre-commit.cmd file to the hooks folder of the repo with the following line:
+
+[path]\PreCommit.exe %1 %2
+
+
+You may consider this overkill but ultimately its only a few minutes of coding. Whas more, you get the advantage of the .NET language suite which IMHO is far preferable to the alternatives. expand my hooks out significantly and write appropriate tests against them as well bit hard to do this with a DOS batch file!
+
+BTW, the code has been adapted from this post.
+
+----------------------------------------
+In case lubos hasko's answer was not unsafe enough, there is also the really unsafe way, using
+pointers in C#. Here's some tips and pitfalls I've run into:
+
+using System;
+using System.Runtime.InteropServices;
+using System.IO;
+using System.Diagnostics;
+
+// Use LayoutKind.Sequential to prevent the CLR from reordering your fields.
+[StructLayout(LayoutKind.Sequential)]
+unsafe struct MeshDesc
+{
+    public byte NameLen;
+    // Here fixed means store the array by value, like in C,
+    // though C# exposes access to Name as a char*.
+    // fixed also requires 'unsafe' on the struct definition.
+    public fixed char Name[16];
+    // You can include other structs like in C as well.
+    public Matrix Transform;
+    public uint VertexCount;
+    // But not both, you can't store an array of structs.
+    //public fixed Vector Vertices[512];
+}
+
+[StructLayout(LayoutKind.Sequential)]
+unsafe struct Matrix
+{
+    public fixed float M[16];
+}
+
+// This is how you do unions
+[StructLayout(LayoutKind.Explicit)]
+unsafe struct Vector
+{
+    [FieldOffset(0)]
+    public fixed float Items[16];
+    [FieldOffset(0)]
+    public float X;
+    [FieldOffset(4)]
+    public float Y;
+    [FieldOffset(8)]
+    public float Z;
+}
+
+class Program
+{
+    unsafe static void Main(string[] args)
+    {
+        var mesh = new MeshDesc();
+        var buffer = new byte[Marshal.SizeOf(mesh)];
+
+        // Set where NameLen will be read from.
+        buffer[0] = 12;
+        // Use Buffer.BlockCopy to raw copy data across arrays of primitives.
+        // Note we copy to offset 2 here: char's have alignment of 2, so there is
+        // a padding byte after NameLen: just like in C.
+        Buffer.BlockCopy("Hello!".ToCharArray(), 0, buffer, 2, 12);
+
+        // Copy data to struct
+        Read(buffer, out mesh);
+
+        // Print the Name we wrote above:
+        var name = new char[mesh.NameLen];
+        // Use Marsal.Copy to copy between arrays and pointers to arrays.
+        unsafe { Marshal.Copy((IntPtr)mesh.Name, name, 0, mesh.NameLen); }
+        // Note you can also use the String.String(char*) overloads
+        Console.WriteLine("Name: " + new string(name));
+
+        // If Erik Myers likes it...
+        mesh.VertexCount = 4711;
+
+        // Copy data from struct:
+        // MeshDesc is a struct, and is on the stack, so it's
+        // memory is effectively pinned by the stack pointer.
+        // This means '&amp;' is sufficient to get a pointer.
+        Write(&amp;mesh, buffer);
+
+        // Watch for alignment again, and note you have endianess to worry about...
+        int vc = buffer[100] | (buffer[101] &lt;&lt; 8) | (buffer[102] &lt;&lt; 16) | (buffer[103] &lt;&lt; 24);
+        Console.WriteLine("VertexCount = " + vc);
+    }
+
+    unsafe static void Write(MeshDesc* pMesh, byte[] buffer)
+    {
+        // But byte[] is on the heap, and therefore needs
+        // to be flagged as pinned so the GC won't try to move it
+        // from under you - this can be done most efficiently with
+        // 'fixed', but can also be done with GCHandleType.Pinned.
+        fixed (byte* pBuffer = buffer)
+            *(MeshDesc*)pBuffer = *pMesh;
+    }
+
+    unsafe static void Read(byte[] buffer, out MeshDesc mesh)
+    {
+        fixed (byte* pBuffer = buffer)
+            mesh = *(MeshDesc*)pBuffer;
+    }
+}
+
