@@ -36,19 +36,19 @@ public class parseQuestions extends DefaultHandler{
 	}
 	
 
-	// first parsing of data file - find 100 questions with 4 to 8 answers
+	// first parsing of data file - find 100 questions with 4 to 7 answers
     public void startDocument() throws SAXException {
     	// initialize postsLength hash table
     	postsLength.put("short",0);
     	postsLength.put("average",0);
     	postsLength.put("long",0);
     	
-    	// open up output files : dataset and statistics
+    	// Open up output files : dataset and statistics
     	try {
     		output_file = new PrintWriter("resources/output/dataset.txt", "UTF-8");
     		stats = new PrintWriter("resources/output/stats.txt", "UTF-8");
     	} catch (Exception e){
-    		System.out.println("error in openning output files");
+    		System.out.println("Error in opening output files");
     	}
     }
     public void startElement(String namespaceURI,
@@ -57,7 +57,7 @@ public class parseQuestions extends DefaultHandler{
             Attributes atts)
             		throws SAXException {
     	
-    	// make sure this post is a question
+    	// Make sure this post is a question
     	int exists =  atts.getIndex("PostTypeId");
     	if (exists > 0) {
     		int typeId = Integer.parseInt(atts.getValue("PostTypeId"));
@@ -91,7 +91,7 @@ public class parseQuestions extends DefaultHandler{
     					output_file.println(noHtmlContent);
     					output_file.println("");
     					// only get 100 questions
-    					if (postsIds.size() == 200){
+    					if (postsIds.size() == 200) {
     						try {
     							// find answers for each question
     						 SAXParserFactory spf = SAXParserFactory.newInstance();
