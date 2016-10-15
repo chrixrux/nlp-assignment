@@ -2,9 +2,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.aliasi.chunk.BioTagChunkCodec;
-import com.aliasi.chunk.ChunkerEvaluator;
 import com.aliasi.chunk.Chunking;
 import com.aliasi.chunk.TagChunkCodec;
 import com.aliasi.corpus.Corpus;
@@ -21,7 +22,7 @@ import com.aliasi.tokenizer.TokenizerFactory;
 import com.aliasi.util.AbstractExternalizable;
 
 public class APIAnnotationTrain {
-
+	public static List<Annotation> annotationList;
 	public APIAnnotationTrain() {
 		// TODO Auto-generated constructor stub
 	}
@@ -29,7 +30,18 @@ public class APIAnnotationTrain {
 	public static void main(String[] args) throws IOException {
 		String sampleText = new String(Files.readAllBytes(Paths.get("resources/data/annotated_dataset.txt")));
 		ANNParser annParser = new ANNParser();
-		Corpus<ObjectHandler<Chunking>> corpus = new APIAnnotationCorpus(sampleText, annParser.annotationList);
+		 annotationList = annParser.annotationList;
+		
+		int[] indexes = {0,0,0,0};
+		List<Annotation> trainingList = new ArrayList<>();
+		List<Annotation> testList = new ArrayList<>();
+		
+		System.out.println("First quarter:" + getQuarter(0, annotationList));
+		System.out.println("Second quarter:" + getQuarter(1, annotationList));
+		System.out.println("Third quarter:" + getQuarter(2, annotationList));
+		System.out.println("Fourth quarter:" + getQuarter(3, annotationList));
+		
+		Corpus<ObjectHandler<Chunking>> corpus = new APIAnnotationCorpus(sampleText, getTrainingList(0, annotationList));
 		TokenizerFactory tokenizerFactory = IndoEuropeanTokenizerFactory.INSTANCE;
 		boolean enforceConsistency = true;
 		TagChunkCodec tagChunkCodec = new BioTagChunkCodec(tokenizerFactory, enforceConsistency);
@@ -101,5 +113,20 @@ public class APIAnnotationTrain {
     AbstractExternalizable.serializeTo(crfChunker,modelFile); 
 }
 
+	public static <E> List<E> getQuarter(int quarter, List<E> list) {
+	int quarterIndex = list.size()/4;
+	List<E> quarterList = list.subList(quarterIndex*quarter, quarterIndex*(quarter+1)-1);
+	return quarterList;	
+}
+	
+	private static <E> List<E> getTrainingList(int indexTestList, List<E> list) {
+		List<E> trainingList = new ArrayList<>();
+		for(int i = 0; i<4; i++) {
+			if (!(i == indexTestList)) {
+				trainingList.addAll(getQuarter(i, list));
+			}
+		}
+		return trainingList;
+	}
 	}
 
