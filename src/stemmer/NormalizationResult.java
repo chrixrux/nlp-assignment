@@ -1,11 +1,14 @@
+package stemmer;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import utils.Utils;
+
 public class NormalizationResult {
-	List<String> tokenList;
-	Map<String, Integer> tokenCountMap;
-	int uniqueTokensCount;
+	public List<String> tokenList;
+	public Map<String, Integer> tokenCountMap;
+	public int uniqueTokensCount;
 	
 	NormalizationResult(List<String> tokenList, Map<String, Integer> tokenCountMap) {
 		this.tokenList = tokenList;

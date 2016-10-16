@@ -1,4 +1,5 @@
-# nlp-assignment
+-------------------------------------------------------------------------------------------------------------------------------------------
+
 The StackoverflowXMLParser can be used to extract posts from the unzipped "Posts.xml" file provided by Stackexchange.
 The parser will create a new "dataset.txt" file containing the extractet posts and a "stats.txt" file containing statistics about the dataset like the answer distribution. 
 	 
@@ -19,6 +20,8 @@ The parser will create a new "dataset.txt" file containing the extractet posts a
 	StackoverflowXMLParser pathToPostsFile pathToOutputDirectory 200 900 4 7
 	These are also the default values if no optional parameters are provided.
 	
+-------------------------------------------------------------------------------------------------------------------------------------------	
+ 
  The StackoverflowAnalyzer offers functionality to analyze the dataset after it was parsed by the StackoverflowXMLParser.
  It offers the following functions:
  	- Stemming: Given the dataset this function will remove common English stopwords and characters like parentheses and brackets.
@@ -48,4 +51,5 @@ The parser will create a new "dataset.txt" file containing the extractet posts a
 										nBestPOSSequence numberOfSentences seed n
 										nBestPOSTag 	 numberOfSentences seed n 
   										regexAPIMentions
- 										crfAPIMentions							
+ 										crfAPIMentions		
+ -------------------------------------------------------------------------------------------------------------------------------------------															

@@ -1,7 +1,10 @@
+package stemmer;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+
+import utils.Utils;
 
 public class StemmingResult {
 	List<String> stemList;

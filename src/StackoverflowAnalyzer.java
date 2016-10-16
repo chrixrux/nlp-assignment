@@ -3,6 +3,13 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
+import posTagger.POSTagger;
+import posTagger.SentenceDetector;
+import stemmer.NormalizationResult;
+import stemmer.Stemmer;
+import stemmer.StemmingResult;
+import utils.Utils;
+
 /**
  * The StackoverflowAnalyzer offers functionality to analyze the dataset after it was parsed by the StackoverflowXMLParser.
  * It offers the following functions:
@@ -45,6 +52,7 @@ public class StackoverflowAnalyzer {
 		//Validate and parse input parameters 
 		if(args.length < 2) {
 			System.out.println("Not enough input parameters specified");
+			System.exit(0);
 		}
 		
 		String pathToDataset = args[0];
@@ -99,23 +107,6 @@ public class StackoverflowAnalyzer {
 				System.out.println("Function " + function + "is not recognized.");
 				printUsage();
 		}
-		
-		/*String sampleText = new String(Files.readAllBytes(Paths.get("resources/data/dataset.txt")));
-		Stemmer stemmer = new Stemmer();
-		NormalizationResult normResult = stemmer.normalize(sampleText);
-		normResult.printTopNTokens(20);
-		
-		StemmingResult stemResult = stemmer.stem(normResult.tokenList);
-		stemResult.printTopNStems(20);
-		
-		SentenceDetector sentenceDetector = new SentenceDetector();
-		List<String> sentenceList = sentenceDetector.detectSentences(sampleText);
-		List<String> randomSentencesList = Utils.getNRandomListElements(sentenceList, 10);
-		
-		POSTagger posTagger = new POSTagger();
-		posTagger.printBestPosTag(randomSentencesList);
-		posTagger.printPosTagLattice(randomSentencesList);
-		posTagger.printNBestPosTags(randomSentencesList, 3);  */
 	}
 	
 	private static void printUsage() {
@@ -138,7 +129,30 @@ public class StackoverflowAnalyzer {
 		stemResult.printTopNStems(numberOfTopWords);
 	}
 	
-	private static void performPOSTagging(String function, int... numbers) {
+	private static void performPOSTagging(String function, int... parameters) {
+		int numberOfSentences = parameters[0];
+		int seed = parameters[1];
+		int n = -1;
+		if (parameters.length == 3) {
+			n = parameters[2]; 
+		}
 		
+		SentenceDetector sentenceDetector = new SentenceDetector();
+		List<String> sentenceList = sentenceDetector.detectSentences(text);
+		List<String> randomSentencesList = Utils.getNRandomListElements(sentenceList, numberOfSentences, seed);
+		
+		POSTagger posTagger = new POSTagger();
+		
+		switch (function) {
+		case "posTagging":
+			posTagger.printBestPosTag(randomSentencesList);
+			break;
+		case "nBestPOSSequence":
+			posTagger.printNBestPosTags(randomSentencesList, n);
+			break;
+		case "nBestPOSTag":
+			posTagger.printPosTagLattice(randomSentencesList); //add n 
+			break;
+		}
 	}
 }

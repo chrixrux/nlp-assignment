@@ -1,3 +1,4 @@
+package utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -5,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * This class contains various utils functions
@@ -45,13 +47,14 @@ public class Utils {
 		return result;
 	}
 	
-	public static <E> List<E> getNRandomListElements(List<E> list, int numberOfElements) {
+	public static <E> List<E> getNRandomListElements(List<E> list, int numberOfElements, int seed) {
 		if (list.size() < numberOfElements) {
 			numberOfElements = list.size();
 		}
+		Random rng = new Random(seed);
 		List<E> resultList = new ArrayList<>(numberOfElements);
 		for (int i = 0; i < numberOfElements; i++) {
-			int index = (int) (Math.random()*list.size());
+			int index = rng.nextInt(list.size());
 			E selectedElement = list.remove(index);
 			resultList.add(selectedElement);
 		}

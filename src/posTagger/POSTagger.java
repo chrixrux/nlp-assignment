@@ -1,3 +1,4 @@
+package posTagger;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class POSTagger {
 
 	private HmmDecoder decoder;
 
-	POSTagger() {
+	public POSTagger() {
 		try {
 			FileInputStream fileInputStream = new FileInputStream(
 					"resources/models/pos-en-general-brown.HiddenMarkovModel");
