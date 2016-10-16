@@ -21,11 +21,6 @@ public class Stemmer {
 	 */
 	 public NormalizationResult normalize(String text) {
          // Create base tokenizer
-		 /*
-		  * It might be a bad idea to use IndoEuropeanTokenizer because it also separates . and ( )
-		  * So it will split String.format() into 6 different tokens. Other possibility would be a whitespace tokenizer
-		  * but it would keep word, together.
-		  */
          TokenizerFactory baseTokenizer = IndoEuropeanTokenizerFactory.INSTANCE;
          // LowerCaseTokenizer filters the tokenizers produced by the base tokenizer factory to produce lower case output.
          TokenizerFactory lowerCaseTokenizer = new LowerCaseTokenizerFactory(baseTokenizer);

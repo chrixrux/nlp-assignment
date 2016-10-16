@@ -34,17 +34,14 @@ public class POSTagger {
 			System.out.println("Path is wrong");
 			ex.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
 	public void printBestPosTag(List<String> sentences) {
 		for (String sentence : sentences) {
-//			List<String> tokens = whitespaceTokenization(sentence);
 			List<String> tokens = indoEuropeanTokenization(sentence);
 			Tagging<String> taggingResults = decoder.tag(tokens);
 			System.out.println(taggingResults.toString());
@@ -54,7 +51,6 @@ public class POSTagger {
 	public void printNBestPosTags(List<String> sentences, int maxResults) {
 		System.out.printf("Score %13s", "Sentences");
 		for (String sentence : sentences) {
-//			List<String> tokens = whitespaceTokenization(sentence);
 			List<String> tokens = indoEuropeanTokenization(sentence);
 			Iterator<ScoredTagging<String>> iterator = decoder.tagNBest(tokens, maxResults);
 			System.out.println();
@@ -73,7 +69,6 @@ public class POSTagger {
 	public void printPosTagLattice(List<String> sentences) {
 		System.out.printf("Token %14s", "Prob/Tag");
 		for (String sentence : sentences) {
-//			List<String> tokens = whitespaceTokenization(sentence);
 			List<String> tokens = indoEuropeanTokenization(sentence);
 			
 			// Perform POS Tagging
@@ -92,11 +87,6 @@ public class POSTagger {
 		}
 	}
 	
-	private List<String> whitespaceTokenization(String text) {
-		String[] tokensArray = text.split(" ");
-		return Arrays.asList(tokensArray);
-
-	}
 	
 	private List<String> indoEuropeanTokenization(String text) {
 		TokenizerFactory baseTokenizer = IndoEuropeanTokenizerFactory.INSTANCE;
