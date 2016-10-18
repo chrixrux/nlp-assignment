@@ -1,3 +1,4 @@
+package regExChunker;
 import com.aliasi.chunk.RegExChunker;
 
 public class APIRegexChunker extends RegExChunker {

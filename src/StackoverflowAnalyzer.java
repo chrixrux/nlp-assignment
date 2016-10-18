@@ -2,9 +2,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Set;
+
+import com.aliasi.chunk.Chunk;
+import com.aliasi.chunk.Chunker;
+import com.aliasi.chunk.Chunking;
 
 import posTagger.POSTagger;
 import posTagger.SentenceDetector;
+import regExChunker.APIRegexChunker;
 import stemmer.NormalizationResult;
 import stemmer.Stemmer;
 import stemmer.StemmingResult;
@@ -99,6 +105,7 @@ public class StackoverflowAnalyzer {
 			}
 			break;
 		case "regexAPIMentions":
+			performRegExAPImentions();
 			break;
 		case "crfAPIMentions":
 			break;
@@ -151,8 +158,22 @@ public class StackoverflowAnalyzer {
 			posTagger.printNBestPosTags(randomSentencesList, n);
 			break;
 		case "nBestPOSTag":
-			posTagger.printPosTagLattice(randomSentencesList); //add n 
+			posTagger.printPosTagLattice(randomSentencesList, n);
 			break;
+		}
+	}
+	
+	private static void performRegExAPImentions() {
+		Chunker chunker = new APIRegexChunker();
+		Chunking chunking = chunker.chunk(text);
+		Set<Chunk> chunkSet = chunking.chunkSet();
+		
+		System.out.println(chunkSet.size() + " API mentions found with a regular expression");
+		for (Chunk chunk: chunkSet) {
+			int startIndex = chunk.start();
+			int endIndex = chunk.end();
+			String apiMention = text.substring(startIndex, endIndex);
+			System.out.println("From index " + startIndex + " to " + endIndex + "API mentioned: " + apiMention);
 		}
 	}
 }
