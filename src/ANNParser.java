@@ -9,6 +9,7 @@ public class ANNParser {
 	private String annotationText;
 	private String[] lines;
 	public  List<Annotation> annotationList;
+	public  List<String> annotationTexts = new ArrayList<>();
 
 	public ANNParser() {
 		annotationList = new ArrayList<>();
@@ -52,6 +53,7 @@ public class ANNParser {
 			endIndex = Integer.parseInt(lines[lineIndex].substring(15,20));	
 			text = lines[lineIndex].substring(21);
 		}
+		annotationTexts.add(text);
 		return new Annotation(startIndex, endIndex, text);
 	}
 	

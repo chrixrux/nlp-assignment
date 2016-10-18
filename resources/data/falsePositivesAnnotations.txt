@@ -1,0 +1,168 @@
+db.MySproc().
+
+"]).Distinct()
+
+File.Delete().
+
+unwinding, etc.),
+
+RetryTimer(TimeSpan.FromHours(10))
+
+this.RetryFileIO( delegate()
+
+"]).Distinct().OrderBy(
+
+Assembly.GetExecutingAssembly().GetName().
+
+})", v.Major, v.Minor, v.Build, v.Revision)
+
+d)d(?!d)")
+
+Process())
+
+h.dateCol 
+       ).Max()
+
+OleDbConnection())
+
+OleDbCommand())
+
+cmd.ExecuteReader())
+    {
+      while (dr.Read())
+
+OleDbConnection())
+
+OleDbCommand())
+    {
+        conn.Open()
+
+cmd.ExecuteReader())
+        {
+            while (dr.Read())
+
+File.userDirectory.resolvePath("").
+
+RetryTimer(TimeSpan.FromHours(10))
+
+termios.tcgetattr(sys.stdin)
+    tty.setraw(sys.stdin.fileno())
+    select.select([sys.stdin], [], [], 0)
+
+sys.stdin.read(1)
+
+termios.tcsetattr(sys.stdin, termios.TCSADRAIN,
+
+Point(Cursor.Position.X - 1, Cursor.Position.Y - 1)
+
+a.Form())
+
+them (i.e. DataBind())
+
+ConfigurationProperty("MyStuff", typeof(MyStuffElement), null)
+
+ConfigurationProperty("SomeStuff", typeof(string), "
+
+ConfigurationManager.GetSection("MyStuffSection") as MyWeb.Configuration.
+
+].ToString().Split(
+
+UInt32)((
+
+UInt16)((
+
+Array.Copy(Utilities.ByteArrayToUInt32Array(b), (
+
+["name"].ToString()
+
+"].ToString() + "\
+
+SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('MD5', 'HelloWorld')), 3, 32)
+
+Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(YourStruct))
+
+SmtpClient(conf.Mail.Host, conf.Mail.Port)
+
+').style.
+
+select (string)dr["Name"]).Distinct().OrderBy(
+
+int.TryParse( Convert.ToString( o ),
+
+GetType).  int.
+
+CreateObject("Scripting.Dictionary")
+objDictionary.Add "Name", "Scott"
+objDictionary.Add "Age", "20"
+if objDictionary.Exists("Name")
+
+Request.IsPost())
+
+userDir.substr(userDir.lastIndexOf(File.separator)
+
+DateTime.Now.Date.AddDays(-1)
+
+u.id, u.name, h.
+
+cmd.ExecuteReader()) {
+  if (dr.Read())
+
+while (dr.Read())
+
+CreateObject("Scripting.Dictionary")
+objDictionary.
+
+TestContext(CreateSparqlTripleStore())
+
+", os.path.expanduser("
+
+fonts.extend(
+                [os.path.join(
+
+SCG (System.Collections.Generic),
+
+GCHandle.Alloc(buff, GCHandleType.Pinned)
+
+].split("-")
+
+Date( Date.parse( dateParts.join("/")+(
+
+" ") ) )
+
+processorArchitecture.Equals("x86"))
+
+rTest.IsMatch(formattedString))
+        return rTest.Replace(formattedString, string.Empty)
+
+Regex(@"(\e(\[([\d
+
+50d).ToList()
+
+weights.zip(data).
+
+asdfas".MyMethod()
+
+".ContainsMabster())
+
+equivalent .Method().Method.Method()
+
+Date(Date.parse( dateString ))
+
+o).Take(5)
+
+Html.Resource("ResourceName", "foo", "bar")
+
+SCG (System.Collections.Generic),
+
+]).Distinct().OrderBy(
+
+Node.Bounds.Contains( pt ) )
+
+Console.Error.WriteLine("
+
+C.
+        Buffer.BlockCopy("Hello!".ToCharArray(), 0,
+
+GCHandleType.Pinned.
+        fixed (
+

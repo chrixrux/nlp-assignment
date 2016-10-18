@@ -23,25 +23,21 @@ import com.aliasi.util.AbstractExternalizable;
 
 public class APIAnnotationTrain {
 	public static List<Annotation> annotationList;
+	public List<String> annotationTexts; 
 	public APIAnnotationTrain() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public static void main(String[] args) throws IOException {
+	public static void train(int indexTestList) throws IOException {
+		//Do not parse the dataset each time training is called. But once when the APIChunker is initialized
 		String sampleText = new String(Files.readAllBytes(Paths.get("resources/data/annotated_dataset.txt")));
 		ANNParser annParser = new ANNParser();
 		 annotationList = annParser.annotationList;
 		
-		int[] indexes = {0,0,0,0};
-		List<Annotation> trainingList = new ArrayList<>();
-		List<Annotation> testList = new ArrayList<>();
 		
-		System.out.println("First quarter:" + getQuarter(0, annotationList));
-		System.out.println("Second quarter:" + getQuarter(1, annotationList));
-		System.out.println("Third quarter:" + getQuarter(2, annotationList));
-		System.out.println("Fourth quarter:" + getQuarter(3, annotationList));
-		
-		Corpus<ObjectHandler<Chunking>> corpus = new APIAnnotationCorpus(sampleText, getTrainingList(0, annotationList));
+		List<Annotation> list = getTrainingList(indexTestList, annotationList);
+
+		Corpus<ObjectHandler<Chunking>> corpus = new APIAnnotationCorpus(sampleText, list);
 		TokenizerFactory tokenizerFactory = IndoEuropeanTokenizerFactory.INSTANCE;
 		boolean enforceConsistency = true;
 		TagChunkCodec tagChunkCodec = new BioTagChunkCodec(tokenizerFactory, enforceConsistency);
@@ -73,10 +69,10 @@ public class APIAnnotationTrain {
     int maxEpochs = 5000;
 
     Reporter reporter
-        = Reporters.stdOut().setLevel(LogLevel.DEBUG);
+        = Reporters.stdOut().setLevel(LogLevel.NONE);
 
-    System.out.println("\nEstimating");
-    ChainCrfChunker crfChunker
+    //System.out.println("\nEstimating");
+  ChainCrfChunker crfChunker
         = ChainCrfChunker.estimate(corpus,
                                    tagChunkCodec,
                                    tokenizerFactory,
@@ -90,32 +86,21 @@ public class APIAnnotationTrain {
                                    minImprovement,
                                    minEpochs,
                                    maxEpochs,
-                                   reporter);
- /*   
-    System.out.println("compiling");
-    @SuppressWarnings("unchecked") // required for serialized compile
-        ChainCrfChunker compiledCrfChunker
-        = (ChainCrfChunker)
-        AbstractExternalizable.serializeDeserialize(crfChunker);
-    System.out.println("     compiled");
-
-    System.out.println("\nEvaluating");
-    ChunkerEvaluator evaluator
-        = new ChunkerEvaluator(compiledCrfChunker);
-
-    corpus.visitTest(evaluator);
-    System.out.println("\nEvaluation");
-    System.out.println(evaluator); */
-    
-
+                                   reporter); 
+ 
     File modelFile = new File("resources/data/output.ser");
-    System.out.println("\nCompiling to file=" + modelFile);
-    AbstractExternalizable.serializeTo(crfChunker,modelFile); 
-}
+  //  System.out.println("\nCompiling to file=" + modelFile);
+    AbstractExternalizable.serializeTo(crfChunker,modelFile);
+	} 
 
 	public static <E> List<E> getQuarter(int quarter, List<E> list) {
 	int quarterIndex = list.size()/4;
-	List<E> quarterList = list.subList(quarterIndex*quarter, quarterIndex*(quarter+1)-1);
+	List<E> quarterList = new ArrayList<>();
+	if (quarter == 4){
+		quarterList = list.subList(quarterIndex*quarter, list.size()-1);
+	} else {
+		 quarterList = list.subList(quarterIndex*quarter, quarterIndex*(quarter+1)-1);
+	}
 	return quarterList;	
 }
 	
@@ -128,5 +113,6 @@ public class APIAnnotationTrain {
 		}
 		return trainingList;
 	}
+	
 	}
 
