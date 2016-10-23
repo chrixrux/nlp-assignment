@@ -24,9 +24,7 @@ These are also the default values if no optional parameters are provided.
  
  The StackoverflowAnalyzer offers functionality to analyze the dataset after it was parsed by the StackoverflowXMLParser.
  It offers the following functions:
- 	- Stemming: Given the dataset this function will remove common English stopwords and characters like parentheses and brackets.
- 				The method then will count all remaining words before and after performing the stemming. To specify the number of 
-  				top words printed in the table e.g. Top 20, the numberOfTopWords parameter has to be passed when using this function.
+ 	- Stemming: Given the dataset this function will remove common English stopwords and characters like parentheses and brackets. The method then will count all remaining words before and after performing the stemming. To specify the number of top words printed in the table e.g. Top 20, the numberOfTopWords parameter has to be passed when using this function.
   	
   	- posTagging: Given the dataset this function will first perform sentence detection and then randomly extract a specified number of 				  sentences. The sentences then will be annotated with the most likely POS-tag sequence and printed. For repeatable results 				  the seed for the RNG can be specified, so that the same sentences will be extracted each time.
  - nBestPOSSequence: This function does the same as "posTagging" but instead of printing just the most likely POS-tag sequence this prints the n-likeliest ones including their score. A higher score means this POS-tag sequence is more likely. 
@@ -48,4 +46,27 @@ StackoverflowAnalyzer pathToDataset
 										nBestPOSTag 	 numberOfSentences seed n 
   										regexAPIMentions
  										crfAPIMentions		
- -------------------------------------------------------------------------------------------------------------------------------------------															
+ 											
+For the following examples one of the posts from our full 500 posts database will be used. This is an good example as it has natural senteces as well as code with API mentions: 
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+I'm trying to read binary data using C#. I have all information about the layout of the data in the files I want to read. I'm able to read the data "chunk by chunk", i.e. getting the first 40 bytes of data converting it to a string, get the next 40 bytes, ...
+Since there are at least three slighlty different version of the data, I would like to read the data directly into a struct. It just feels so much more right than by reading it "line by line".
+I have tried the following approach but to no avail:
+
+StructType aStruct;
+int count = Marshal.SizeOf(typeof(StructType));
+byte[] readBuffer = new byte[count];
+BinaryReader reader = new BinaryReader(stream);
+readBuffer = reader.ReadBytes(count);
+GCHandle handle = GCHandle.Alloc(readBuffer, GCHandleType.Pinned);
+aStruct = (StructType) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(StructType));
+handle.Free();
+
+The stream is an opened FileStream from which I have began to read from. I get an AccessViolationException when using Marshal.PtrToStructure.
+The stream contains more information than I'm trying to read since I'm not interested in data at the end of the file.
+
+The examples code is changed from original to make this question shorter.
+How would I read binary data from a file into a struct?
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+ 														
