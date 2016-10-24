@@ -4,18 +4,22 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This is used to parse the annotations from the brat tool and store them as a list.
+ * @author christian
+ *
+ */
 public class ANNParser {
 
 	private String annotationText;
 	private String[] lines;
-	public  List<Annotation> annotationList;
-	public  List<String> annotationTexts = new ArrayList<>();
+	private  List<Annotation> annotationList;
 
-	public ANNParser() {
+	public ANNParser(String pathToAnnotationFile) {
 		annotationList = new ArrayList<>();
 		
 		try {
-			annotationText = new String(Files.readAllBytes(Paths.get("resources/data/annotated_dataset.ann")));
+			annotationText = new String(Files.readAllBytes(Paths.get(pathToAnnotationFile)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -53,10 +57,12 @@ public class ANNParser {
 			endIndex = Integer.parseInt(lines[lineIndex].substring(15,20));	
 			text = lines[lineIndex].substring(21);
 		}
-		annotationTexts.add(text);
 		return new Annotation(startIndex, endIndex, text);
 	}
-	
+
+	public List<Annotation> getAnnotationList() {
+		return annotationList;
+	}
 	
 	}
 

@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.aliasi.chunk.BioTagChunkCodec;
@@ -21,12 +20,11 @@ import com.aliasi.tokenizer.IndoEuropeanTokenizerFactory;
 import com.aliasi.tokenizer.TokenizerFactory;
 import com.aliasi.util.AbstractExternalizable;
 
-public class APIAnnotationCrossValidationTrain {
-	// annotationList stores all annotations that were annotated in the text
-	public List<Annotation> fullAnnotationList;
-	private String text;
-
-	public APIAnnotationCrossValidationTrain() {
+public class APIAnnotationFullTrain {
+	private static List<Annotation> fullAnnotationList;
+	private static String text;
+	
+	public static void main(String[] args) throws IOException {
 		try {
 			text = new String(Files.readAllBytes(Paths.get("resources/data/annotated_dataset.txt")));
 			ANNParser annParser = new ANNParser("resources/data/annotated_dataset.ann");
@@ -34,20 +32,8 @@ public class APIAnnotationCrossValidationTrain {
 		} catch (IOException ex) {
 			System.out.println("Error reading dataset and parsing annotations");
 		}
-	}
 
-	/**
-	 * 
-	 * @param indexOfTestList
-	 * @throws IOException
-	 */
-	public void train(int indexOfTestList) throws IOException {
-		// Do not parse the dataset each time training is called. But once when
-		// the APIChunker is initialized
-
-		List<Annotation> trainingList = getTrainingList(indexOfTestList, fullAnnotationList);
-
-		Corpus<ObjectHandler<Chunking>> corpus = new APIAnnotationCorpus(text, trainingList);
+		Corpus<ObjectHandler<Chunking>> corpus = new APIAnnotationCorpus(text, fullAnnotationList);
 		TokenizerFactory tokenizerFactory = IndoEuropeanTokenizerFactory.INSTANCE;
 		boolean enforceConsistency = true;
 		TagChunkCodec tagChunkCodec = new BioTagChunkCodec(tokenizerFactory, enforceConsistency);
@@ -75,55 +61,11 @@ public class APIAnnotationCrossValidationTrain {
 
 		Reporter reporter = Reporters.stdOut().setLevel(LogLevel.INFO);
 
-		System.out.println("\nEstimating");
 		ChainCrfChunker crfChunker = ChainCrfChunker.estimate(corpus, tagChunkCodec, tokenizerFactory, featureExtractor,
 				addIntercept, minFeatureCount, cacheFeatures, prior, priorBlockSize, annealingSchedule, minImprovement,
 				minEpochs, maxEpochs, reporter);
 
-		File modelFile = new File("resources/data/output.ser");
+		File modelFile = new File("resources/models/fullAPIModel.ser");
 		AbstractExternalizable.serializeTo(crfChunker, modelFile);
-	}
-
-	/***
-	 * This function returns the specified quarter of a list
-	 * 
-	 * @param quarter
-	 *            values: 0 - 3
-	 * @param list
-	 *            from which one quarter will be extracted
-	 * @return
-	 */
-	public static <E> List<E> getQuarter(int quarter, List<E> list) {
-		int quarterIndex = list.size() / 4;
-		List<E> quarterList = new ArrayList<>();
-		if (quarter == 4) {
-			quarterList = list.subList(quarterIndex * quarter, list.size() - 1);
-		} else {
-			quarterList = list.subList(quarterIndex * quarter, quarterIndex * (quarter + 1) - 1);
-		}
-		return quarterList;
-	}
-
-	/**
-	 * 
-	 * @param indexTestList
-	 *            specifies which quarter of the list should be used for testing
-	 *            (0-3).
-	 * @param list
-	 *            fullList from which the trainingList will be extracted
-	 * @return the list used for training in this iteration of the cross
-	 *         validation, i.e. the full list without the specified list used
-	 *         for testing
-	 */
-	private <E> List<E> getTrainingList(int indexTestList, List<E> list) {
-		List<E> trainingList = new ArrayList<>();
-		for (int i = 0; i < 4; i++) {
-			// If the current quarter is not the test quarter add it to the
-			// trainingList
-			if (!(i == indexTestList)) {
-				trainingList.addAll(getQuarter(i, list));
-			}
-		}
-		return trainingList;
 	}
 }

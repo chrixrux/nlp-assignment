@@ -17,7 +17,7 @@ import com.aliasi.util.AbstractExternalizable;
 public class APIAnnotationChunk {
 	static PrintWriter output_file;
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
-		APIAnnotationTrain at = new APIAnnotationTrain();
+		APIAnnotationCrossValidationTrain at = new APIAnnotationCrossValidationTrain();
 		
     	try {
     		output_file = new PrintWriter("resources/data/falsePositivesAnnotations.txt", "UTF-8");
@@ -28,7 +28,7 @@ public class APIAnnotationChunk {
 		double totalf1 = 0;
 		for (int i = 0; i < 4; i++) {
 			at.train(i);
-			List<Annotation> list = at.getQuarter(i, at.annotationList);
+			List<Annotation> list = at.getQuarter(i, at.fullAnnotationList);
 			List<String> annotationTexts = new ArrayList<>();
 			for (Annotation ann : list) {
 				annotationTexts.add(ann.text);
@@ -41,11 +41,11 @@ public class APIAnnotationChunk {
 			if(i == 0) {
 				 substring = text.substring(0, list.get(list.size() - 1).end);
 			} else if (i == 3) {
-				List<Annotation> previousAnnotations = at.getQuarter(i-1, at.annotationList);
+				List<Annotation> previousAnnotations = at.getQuarter(i-1, at.fullAnnotationList);
 				 substring = text.substring(previousAnnotations.get(previousAnnotations.size()-1).end);
 			}
 			else {
-				List<Annotation> previousAnnotations = at.getQuarter(i-1, at.annotationList);
+				List<Annotation> previousAnnotations = at.getQuarter(i-1, at.fullAnnotationList);
 				 substring = text.substring(previousAnnotations.get(previousAnnotations.size()-1).end, list.get(list.size() - 1).end);
 			}
 			Chunking chunking = crfChunker.chunk(substring);

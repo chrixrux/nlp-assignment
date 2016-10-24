@@ -1,4 +1,8 @@
-
+/**
+ * This is a POJO to store annotations that are parsed from brat
+ * @author christian
+ *
+ */
 public class Annotation {
 	public int start;
 	public int end;

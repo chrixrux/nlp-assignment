@@ -108,6 +108,7 @@ public class StackoverflowAnalyzer {
 			performRegExAPImentions();
 			break;
 		case "crfAPIMentions":
+			performCrfApiMentions();
 			break;
 			
 		default:
@@ -167,6 +168,19 @@ public class StackoverflowAnalyzer {
 		Chunker chunker = new APIRegexChunker();
 		Chunking chunking = chunker.chunk(text);
 		Set<Chunk> chunkSet = chunking.chunkSet();
+		
+		System.out.println(chunkSet.size() + " API mentions found with a regular expression");
+		for (Chunk chunk: chunkSet) {
+			int startIndex = chunk.start();
+			int endIndex = chunk.end();
+			String apiMention = text.substring(startIndex, endIndex);
+			System.out.println("From index " + startIndex + " to " + endIndex + "API mentioned: " + apiMention);
+		}
+	}
+	
+	private static void performCrfApiMentions() {
+		FullCrfApiFinder apiFinder = new FullCrfApiFinder(text);
+		Set<Chunk> chunkSet = apiFinder.chunkSet();
 		
 		System.out.println(chunkSet.size() + " API mentions found with a regular expression");
 		for (Chunk chunk: chunkSet) {
