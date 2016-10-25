@@ -26,8 +26,7 @@ public class POSTagger {
 	public POSTagger() {
 		try {
 			//Load the model provided by LingPipe 
-			FileInputStream fileInputStream = new FileInputStream(
-					"resources/models/pos-en-general-brown.HiddenMarkovModel");
+			FileInputStream fileInputStream = new FileInputStream("resources/models/pos-en-general-brown.HiddenMarkovModel");
 			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 			HiddenMarkovModel hmm = (HiddenMarkovModel) objectInputStream.readObject();
 			objectInputStream.close();
@@ -52,7 +51,7 @@ public class POSTagger {
 	}
 
 	public void printNBestPosTags(List<String> sentences, int maxResults) {
-		System.out.printf("Score %13s", "Sentences");
+		System.out.printf("Score %13s", "Sentences\n");
 		for (String sentence : sentences) {
 			List<String> tokens = indoEuropeanTokenization(sentence);
 			Iterator<ScoredTagging<String>> iterator = decoder.tagNBest(tokens, maxResults);

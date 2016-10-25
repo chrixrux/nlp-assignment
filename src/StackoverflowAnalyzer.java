@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -81,6 +82,7 @@ public class StackoverflowAnalyzer {
 		//For all other commands the validation starts here
 		if (args.length < 2) {
 			System.out.println("Not enough input parameters specified!");
+			printUsage();
 			System.exit(0);
 		}
 
@@ -90,6 +92,7 @@ public class StackoverflowAnalyzer {
 			text = new String(Files.readAllBytes(Paths.get(pathToDataset)));
 		} catch (IOException e) {
 			System.out.println("Error while loading dataset. Is the path correct?");
+			printUsage();
 			System.exit(0);
 		}
 
@@ -147,7 +150,8 @@ public class StackoverflowAnalyzer {
 				+ "\t\t\t\t stemming numberOfTopWords \n" + "\t\t\t\t posTagging numberOfSentences seed \n"
 				+ "\t\t\t\t nBestPOSSequence numberOfSentences seed n \n"
 				+ "\t\t\t\t nBestPOSTag numberOfSentences seed n  \n" + "\t\t\t\t regexAPIMentions \n"
-				+ "\t\t\t\t crfAPIMentions");
+				+ "\t\t\t\t crfAPIMentions"
+				+ "\t\t\t\t 4CrossValidation");
 	}
 
 	private static void performStemming(int numberOfTopWords) {
@@ -178,10 +182,18 @@ public class StackoverflowAnalyzer {
 			posTagger.printBestPosTag(randomSentencesList);
 			break;
 		case "nBestPOSSequence":
+			if(n > 0) {
 			posTagger.printNBestPosTags(randomSentencesList, n);
+			} else {
+				printUsage();
+			}
 			break;
 		case "nBestPOSTag":
+			if(n > 0) {
 			posTagger.printPosTagLattice(randomSentencesList, n);
+			} else {
+				printUsage();
+			}
 			break;
 		}
 	}
@@ -190,14 +202,25 @@ public class StackoverflowAnalyzer {
 		Chunker chunker = new APIRegexChunker();
 		Chunking chunking = chunker.chunk(text);
 		Set<Chunk> chunkSet = chunking.chunkSet();
-
+		//Just used to evaluate RegEx Api finder not necessary for actual API recognition 
+		ANNParser annParser = new ANNParser("resources/data/annotated_dataset.ann");
+		List<Annotation> manuallyAnnotatedAPIs = annParser.getAnnotationList();
+		List<String> manuallyAnnotatedAPITexts = new ArrayList<>();
+		for (Annotation ann : manuallyAnnotatedAPIs) {
+			manuallyAnnotatedAPITexts.add(ann.text);
+		}
+		List<String> recognizedAPIMentions = new ArrayList<>();
+		
 		System.out.println(chunkSet.size() + " API mentions found with a regular expression");
 		for (Chunk chunk : chunkSet) {
 			int startIndex = chunk.start();
 			int endIndex = chunk.end();
 			String apiMention = text.substring(startIndex, endIndex);
+			recognizedAPIMentions.add(apiMention);
 			System.out.println("From index " + startIndex + " to " + endIndex + "API mentioned: " + apiMention);
 		}
+		APIAnnotationEvaluator evaluator = new APIAnnotationEvaluator();
+		evaluator.performEvaluation(recognizedAPIMentions, manuallyAnnotatedAPITexts);
 	}
 
 	private static void performCrfApiMentions() {
@@ -219,6 +242,7 @@ public class StackoverflowAnalyzer {
 			cv.perform4CrossValidation();
 		} catch (Exception ex) {
 			System.out.println("There was an issue while performing 4 - cross validation");
+			ex.printStackTrace();
 		}
 	}
 }

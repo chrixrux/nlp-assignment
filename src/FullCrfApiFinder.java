@@ -18,7 +18,6 @@ public class FullCrfApiFinder {
 		try {
 			ChainCrfChunker crfChunker = (ChainCrfChunker) AbstractExternalizable
 					.readObject(new File("resources/models/fullAPIModel.ser"));
-			
 			Chunking chunking = crfChunker.chunk(text);
 			chunkSet = chunking.chunkSet();
 		} catch (Exception e) {

@@ -81,10 +81,13 @@ public class APIAnnotationsCrossValidation {
 				recognizedAPIMentions.add(ann);
 			}
 			//recognizedAPIMentions contain all the recognized APImentions while testAnnotationText contains all manually annotated apis 
-			totalf1 += calculateF1(recognizedAPIMentions, testAnnotationTexts);
+			//totalf1 += calculateF1(recognizedAPIMentions, testAnnotationTexts);
+			APIAnnotationEvaluator evaluator = new APIAnnotationEvaluator();
+			evaluator.performEvaluation(recognizedAPIMentions, testAnnotationTexts);
+			
 		}
-		totalf1 = totalf1 / 4;
-		System.out.println("totalF1: " + totalf1);
+		//totalf1 = totalf1 / 4;
+		//System.out.println("totalF1: " + totalf1);
 		output_file.close();
 	}
 

@@ -48,10 +48,11 @@ public class APIAnnotationCrossValidationTrain {
 		Corpus<ObjectHandler<Chunking>> corpus = new APIAnnotationCorpus(text, trainingList);
 		TokenizerFactory tokenizerFactory = IndoEuropeanTokenizerFactory.INSTANCE;
 		boolean enforceConsistency = true;
+		//Use BIO tagging
 		TagChunkCodec tagChunkCodec = new BioTagChunkCodec(tokenizerFactory, enforceConsistency);
 
 		ChainCrfFeatureExtractor<String> featureExtractor = new SimpleChainCrfFeatureExtractor();
-
+		//Set learning variables
 		int minFeatureCount = 1;
 
 		boolean cacheFeatures = true;
@@ -72,7 +73,8 @@ public class APIAnnotationCrossValidationTrain {
 		int maxEpochs = 5000;
 
 		Reporter reporter = Reporters.stdOut().setLevel(LogLevel.NONE);
-		System.out.println("Training the model. This might take a while");
+		System.out.println("Training the model. This might take a while.");
+		//Train the model
 		ChainCrfChunker crfChunker = ChainCrfChunker.estimate(corpus, tagChunkCodec, tokenizerFactory, featureExtractor,
 				addIntercept, minFeatureCount, cacheFeatures, prior, priorBlockSize, annealingSchedule, minImprovement,
 				minEpochs, maxEpochs, reporter);
