@@ -17,63 +17,86 @@ import stemmer.StemmingResult;
 import utils.Utils;
 
 /**
- * The StackoverflowAnalyzer offers functionality to analyze the dataset after it was parsed by the StackoverflowXMLParser.
- * It offers the following functions:
- * 	- Stemming: Given the dataset this function will remove common English stopwords and characters like parentheses and brackets.
- * 				The method then will count all remaining words before and after performing the stemming. To specify the number of 
- * 				top words printed in the table e.g. Top 20, the numberOfTopWords parameter has to be passed when using this function.
+ * The StackoverflowAnalyzer offers functionality to analyze the dataset after
+ * it was parsed by the StackoverflowXMLParser. It offers the following
+ * functions: 
+ * - Stemming: Given the dataset this function will remove common
+ * English stopwords and characters like parentheses and brackets. The method
+ * then will count all remaining words before and after performing the stemming.
+ * To specify the number of top words printed in the table e.g. Top 20, the
+ * numberOfTopWords parameter has to be passed when using this function.
  * 
- * - posTagging: Given the dataset this function will first perform sentence detection and then randomly extract a specified number of sentences.
- * 				 The sentences then will be annotated with the most likely POS-tag sequence and printed. For repeatable results the seed
- * 				 for the RNG can be specified, so that the same sentences will be extracted each time.
+ * - posTagging: Given the dataset this function will first perform sentence
+ * detection and then randomly extract a specified number of sentences. The
+ * sentences then will be annotated with the most likely POS-tag sequence and
+ * printed. For repeatable results the seed for the RNG can be specified, so
+ * that the same sentences will be extracted each time.
  * 
- * - nBestPOSSequence: This function does the same as "posTagging" but instead of printing just the most likely POS-tag sequence this prints the n-likeliest
- * 					  including their score. A higher score means this POS-tag sequence is more likely. 
+ * - nBestPOSSequence: This function does the same as "posTagging" but instead
+ * of printing just the most likely POS-tag sequence this prints the n-likeliest
+ * including their score. A higher score means this POS-tag sequence is more
+ * likely.
  *
- * - nBestPOSTag: This function does the same as "posTagging" but for each token it prints the n-likeliest tags and their probabilities.
+ * - nBestPOSTag: This function does the same as "posTagging" but for each token
+ * it prints the n-likeliest tags and their probabilities.
  * 
- * - regexAPIMentions: This function will find API mentions in the provided dataset by using a regular expression. The regular expression
- * 					   we implemented can be found in the report. The number of API annotations found, their position in the whole text, 
- * 					   and their content will be printed.
+ * - regexAPIMentions: This function will find API mentions in the provided
+ * dataset by using a regular expression. The regular expression we implemented
+ * can be found in the report. The number of API annotations found, their
+ * position in the whole text, and their content will be printed.
  * 
- * - crfAPIMentions: This function will find API mentions in the provided dataset by using a trained conditional random field. The CRF was trained using a
- * 					 human annotated gold standard with more than 100 API annotations.  //ToDo: Cross Validation
+ * - crfAPIMentions: This function will find API mentions in the provided
+ * dataset by using a trained conditional random field. The CRF was trained
+ * using a human annotated gold standard with more than 100 API annotations.
  * 
- * Usage:
- * StackoverflowAnalyzer pathToDataset
- * 										stemming 		 numberOfTopWords 
- * 										posTagging 		 numberOfSentences seed
- * 										nBestPOSSequence numberOfSentences seed n
- * 										nBestPOSTag 	 numberOfSentences seed n 
- * 										regexAPIMentions
- * 										crfAPIMentions
- * 							
- * 							
+ * - 4CrossValidation: This will perform 4 Cross Validation using our manually
+ * annotated dataset. You are not able to specify your own dataset for this
+ * function as this would mean you also have to provide the correct annotations.
+ * 
+ * Usage: StackoverflowAnalyzer pathToDataset stemming numberOfTopWords
+ * posTagging numberOfSentences seed nBestPOSSequence numberOfSentences seed n
+ * nBestPOSTag numberOfSentences seed n regexAPIMentions crfAPIMentions
+ * 4CrossValidation
+ * 
+ * 
  * @author Christian Widmer
  *
  */
 public class StackoverflowAnalyzer {
 	private static String text = "Error: Default text should be overwritten";
+
 	public static void main(String[] args) {
-		//Validate and parse input parameters 
-		if(args.length < 2) {
-			System.out.println("Not enough input parameters specified");
+		// Validate and parse input parameters
+		
+		//If the first argument is the command to perform cross validation just do it 
+		if(args.length == 1) {
+			if(args[0].equals("4CrossValidation")) {
+				perform4CrossValidation();
+			} else {
+				printUsage();
+			}
 			System.exit(0);
 		}
 		
+		//For all other commands the validation starts here
+		if (args.length < 2) {
+			System.out.println("Not enough input parameters specified!");
+			System.exit(0);
+		}
+
 		String pathToDataset = args[0];
-		
+
 		try {
 			text = new String(Files.readAllBytes(Paths.get(pathToDataset)));
 		} catch (IOException e) {
 			System.out.println("Error while loading dataset. Is the path correct?");
 			System.exit(0);
 		}
-		
+
 		String function = args[1];
 		switch (function) {
 		case "stemming":
-			if(args.length == 3) {
+			if (args.length == 3) {
 				String numberOfTopWords = args[2];
 				int numTopWords = Integer.parseInt(numberOfTopWords);
 				performStemming(numTopWords);
@@ -85,14 +108,14 @@ public class StackoverflowAnalyzer {
 		case "posTagging":
 		case "nBestPOSSequence":
 		case "nBestPOSTag":
-			if(args.length == 4 || args.length == 5) {
+			if (args.length == 4 || args.length == 5) {
 				String numberOfSentences = args[2];
 				int numSentences = Integer.parseInt(numberOfSentences);
-				
+
 				String seed = args[3];
 				int intSeed = Integer.parseInt(seed);
-				
-				if(args.length == 5) {
+
+				if (args.length == 5) {
 					String n = args[4];
 					int intN = Integer.parseInt(n);
 					performPOSTagging(function, numSentences, intSeed, intN);
@@ -110,47 +133,46 @@ public class StackoverflowAnalyzer {
 		case "crfAPIMentions":
 			performCrfApiMentions();
 			break;
-			
+		case "4CrossValidation":
+			perform4CrossValidation();
+
 		default:
-				System.out.println("Function " + function + "is not recognized.");
-				printUsage();
+			System.out.println("Function " + function + "is not recognized.");
+			printUsage();
 		}
 	}
-	
+
 	private static void printUsage() {
-		System.out.println("Usage: \n"
-				+ "StackoverflowAnalyzer pathToDataset \n"
-				+ "\t\t\t\t stemming numberOfTopWords \n"
-				+ "\t\t\t\t posTagging numberOfSentences seed \n"
+		System.out.println("Usage: \n" + "StackoverflowAnalyzer pathToDataset \n"
+				+ "\t\t\t\t stemming numberOfTopWords \n" + "\t\t\t\t posTagging numberOfSentences seed \n"
 				+ "\t\t\t\t nBestPOSSequence numberOfSentences seed n \n"
-				+ "\t\t\t\t nBestPOSTag numberOfSentences seed n  \n"
-				+ "\t\t\t\t regexAPIMentions \n"
+				+ "\t\t\t\t nBestPOSTag numberOfSentences seed n  \n" + "\t\t\t\t regexAPIMentions \n"
 				+ "\t\t\t\t crfAPIMentions");
 	}
-	
+
 	private static void performStemming(int numberOfTopWords) {
 		Stemmer stemmer = new Stemmer();
 		NormalizationResult normResult = stemmer.normalize(text);
 		normResult.printTopNTokens(numberOfTopWords);
-		
+
 		StemmingResult stemResult = stemmer.stem(normResult.tokenList);
 		stemResult.printTopNStems(numberOfTopWords);
 	}
-	
+
 	private static void performPOSTagging(String function, int... parameters) {
 		int numberOfSentences = parameters[0];
 		int seed = parameters[1];
 		int n = -1;
 		if (parameters.length == 3) {
-			n = parameters[2]; 
+			n = parameters[2];
 		}
-		
+
 		SentenceDetector sentenceDetector = new SentenceDetector();
 		List<String> sentenceList = sentenceDetector.detectSentences(text);
 		List<String> randomSentencesList = Utils.getNRandomListElements(sentenceList, numberOfSentences, seed);
-		
+
 		POSTagger posTagger = new POSTagger();
-		
+
 		switch (function) {
 		case "posTagging":
 			posTagger.printBestPosTag(randomSentencesList);
@@ -163,31 +185,40 @@ public class StackoverflowAnalyzer {
 			break;
 		}
 	}
-	
+
 	private static void performRegExAPImentions() {
 		Chunker chunker = new APIRegexChunker();
 		Chunking chunking = chunker.chunk(text);
 		Set<Chunk> chunkSet = chunking.chunkSet();
-		
+
 		System.out.println(chunkSet.size() + " API mentions found with a regular expression");
-		for (Chunk chunk: chunkSet) {
+		for (Chunk chunk : chunkSet) {
 			int startIndex = chunk.start();
 			int endIndex = chunk.end();
 			String apiMention = text.substring(startIndex, endIndex);
 			System.out.println("From index " + startIndex + " to " + endIndex + "API mentioned: " + apiMention);
 		}
 	}
-	
+
 	private static void performCrfApiMentions() {
 		FullCrfApiFinder apiFinder = new FullCrfApiFinder(text);
 		Set<Chunk> chunkSet = apiFinder.chunkSet();
-		
-		System.out.println(chunkSet.size() + " API mentions found with a regular expression");
-		for (Chunk chunk: chunkSet) {
+
+		System.out.println(chunkSet.size() + " API mentions found with the trained CRF");
+		for (Chunk chunk : chunkSet) {
 			int startIndex = chunk.start();
 			int endIndex = chunk.end();
 			String apiMention = text.substring(startIndex, endIndex);
 			System.out.println("From index " + startIndex + " to " + endIndex + "API mentioned: " + apiMention);
+		}
+	}
+
+	private static void perform4CrossValidation() {
+		APIAnnotationsCrossValidation cv = new APIAnnotationsCrossValidation();
+		try {
+			cv.perform4CrossValidation();
+		} catch (Exception ex) {
+			System.out.println("There was an issue while performing 4 - cross validation");
 		}
 	}
 }

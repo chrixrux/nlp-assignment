@@ -37,14 +37,12 @@ public class APIAnnotationCrossValidationTrain {
 	}
 
 	/**
-	 * 
+	 * This function will train on the full list of annotations  minus the quarter specified with the parameter indexOfTestList
 	 * @param indexOfTestList
 	 * @throws IOException
 	 */
 	public void train(int indexOfTestList) throws IOException {
-		// Do not parse the dataset each time training is called. But once when
-		// the APIChunker is initialized
-
+		
 		List<Annotation> trainingList = getTrainingList(indexOfTestList, fullAnnotationList);
 
 		Corpus<ObjectHandler<Chunking>> corpus = new APIAnnotationCorpus(text, trainingList);
@@ -73,14 +71,13 @@ public class APIAnnotationCrossValidationTrain {
 		int minEpochs = 10;
 		int maxEpochs = 5000;
 
-		Reporter reporter = Reporters.stdOut().setLevel(LogLevel.INFO);
-
-		System.out.println("\nEstimating");
+		Reporter reporter = Reporters.stdOut().setLevel(LogLevel.NONE);
+		System.out.println("Training the model. This might take a while");
 		ChainCrfChunker crfChunker = ChainCrfChunker.estimate(corpus, tagChunkCodec, tokenizerFactory, featureExtractor,
 				addIntercept, minFeatureCount, cacheFeatures, prior, priorBlockSize, annealingSchedule, minImprovement,
 				minEpochs, maxEpochs, reporter);
-
-		File modelFile = new File("resources/data/output.ser");
+		//Save the trained model
+		File modelFile = new File("resources/models/crossValidationModel.ser");
 		AbstractExternalizable.serializeTo(crfChunker, modelFile);
 	}
 

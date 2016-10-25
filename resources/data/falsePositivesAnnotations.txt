@@ -1,168 +1,189 @@
-db.MySproc().
+-----------------------------------
+0 unwinding, etc.),
 
-"]).Distinct()
+-----------------------------------
+1 RetryTimer(TimeSpan.FromHours(10))
 
-File.Delete().
+-----------------------------------
+2 d)d(?!d)")
 
-unwinding, etc.),
+-----------------------------------
+3 Process())
 
-RetryTimer(TimeSpan.FromHours(10))
-
-this.RetryFileIO( delegate()
-
-"]).Distinct().OrderBy(
-
-Assembly.GetExecutingAssembly().GetName().
-
-})", v.Major, v.Minor, v.Build, v.Revision)
-
-d)d(?!d)")
-
-Process())
-
-h.dateCol 
+-----------------------------------
+4 h.dateCol 
        ).Max()
 
-OleDbConnection())
+-----------------------------------
+5 OleDbConnection())
 
-OleDbCommand())
+-----------------------------------
+6 OleDbCommand())
 
-cmd.ExecuteReader())
+-----------------------------------
+7 cmd.ExecuteReader())
     {
       while (dr.Read())
 
-OleDbConnection())
+-----------------------------------
+8 OleDbConnection())
 
-OleDbCommand())
+-----------------------------------
+9 OleDbCommand())
     {
         conn.Open()
 
-cmd.ExecuteReader())
+-----------------------------------
+10 cmd.ExecuteReader())
         {
             while (dr.Read())
 
-File.userDirectory.resolvePath("").
+-----------------------------------
+11 RetryTimer(TimeSpan.FromHours(10))
 
-RetryTimer(TimeSpan.FromHours(10))
-
-termios.tcgetattr(sys.stdin)
+-----------------------------------
+12 termios.tcgetattr(sys.stdin)
     tty.setraw(sys.stdin.fileno())
     select.select([sys.stdin], [], [], 0)
 
-sys.stdin.read(1)
+-----------------------------------
+13 sys.stdin.read(1)
 
-termios.tcsetattr(sys.stdin, termios.TCSADRAIN,
+-----------------------------------
+14 termios.tcsetattr(sys.stdin, termios.TCSADRAIN,
 
-Point(Cursor.Position.X - 1, Cursor.Position.Y - 1)
+-----------------------------------
+15 Point(Cursor.Position.X - 1, Cursor.Position.Y - 1)
 
-a.Form())
+-----------------------------------
+0 them (i.e. DataBind())
 
-them (i.e. DataBind())
+-----------------------------------
+1 ConfigurationProperty("MyStuff", typeof(MyStuffElement), null)
 
-ConfigurationProperty("MyStuff", typeof(MyStuffElement), null)
+-----------------------------------
+2 ConfigurationProperty("SomeStuff", typeof(string), "
 
-ConfigurationProperty("SomeStuff", typeof(string), "
+-----------------------------------
+3 ConfigurationManager.GetSection("MyStuffSection") as MyWeb.Configuration
 
-ConfigurationManager.GetSection("MyStuffSection") as MyWeb.Configuration.
+-----------------------------------
+4 UInt32)((
 
-].ToString().Split(
+-----------------------------------
+5 UInt16)((
 
-UInt32)((
+-----------------------------------
+6 Array.Copy(Utilities.ByteArrayToUInt32Array(b), (
 
-UInt16)((
+-----------------------------------
+7 "].ToString() + "\
 
-Array.Copy(Utilities.ByteArrayToUInt32Array(b), (
+-----------------------------------
+8 SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('MD5', 'HelloWorld')), 3, 32)
 
-["name"].ToString()
+-----------------------------------
+9 Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(YourStruct))
 
-"].ToString() + "\
+-----------------------------------
+10 SmtpClient(conf.Mail.Host, conf.Mail.Port)
 
-SUBSTRING(master.dbo.fn_varbintohexstr(HashBytes('MD5', 'HelloWorld')), 3, 32)
+-----------------------------------
+11 ').style
 
-Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(YourStruct))
+-----------------------------------
+12 select (string)dr["Name"]).Distinct().OrderBy(
 
-SmtpClient(conf.Mail.Host, conf.Mail.Port)
+-----------------------------------
+13 int.TryParse( Convert.ToString( o ),
 
-').style.
+-----------------------------------
+14 GetType).  int
 
-select (string)dr["Name"]).Distinct().OrderBy(
-
-int.TryParse( Convert.ToString( o ),
-
-GetType).  int.
-
-CreateObject("Scripting.Dictionary")
+-----------------------------------
+15 CreateObject("Scripting.Dictionary")
 objDictionary.Add "Name", "Scott"
 objDictionary.Add "Age", "20"
 if objDictionary.Exists("Name")
 
-Request.IsPost())
+-----------------------------------
+0 Request.IsPost())
 
-userDir.substr(userDir.lastIndexOf(File.separator)
+-----------------------------------
+1 DateTime.Now.Date.AddDays(-1)
 
-DateTime.Now.Date.AddDays(-1)
+-----------------------------------
+2 u.id, u.name, h
 
-u.id, u.name, h.
-
-cmd.ExecuteReader()) {
+-----------------------------------
+3 cmd.ExecuteReader()) {
   if (dr.Read())
 
-while (dr.Read())
+-----------------------------------
+4 while (dr.Read())
 
-CreateObject("Scripting.Dictionary")
-objDictionary.
+-----------------------------------
+5 CreateObject("Scripting.Dictionary")
+objDictionary
 
-TestContext(CreateSparqlTripleStore())
+-----------------------------------
+6 TestContext(CreateSparqlTripleStore())
 
-", os.path.expanduser("
+-----------------------------------
+7 ", os.path.expanduser("
 
-fonts.extend(
+-----------------------------------
+8 fonts.extend(
                 [os.path.join(
 
-SCG (System.Collections.Generic),
+-----------------------------------
+9 SCG (System.Collections.Generic),
 
-GCHandle.Alloc(buff, GCHandleType.Pinned)
+-----------------------------------
+10 GCHandle.Alloc(buff, GCHandleType.Pinned)
 
-].split("-")
+-----------------------------------
+11 Date( Date.parse( dateParts.join("/")+(
 
-Date( Date.parse( dateParts.join("/")+(
+-----------------------------------
+12 " ") ) )
 
-" ") ) )
+-----------------------------------
+13 processorArchitecture.Equals("x86"))
 
-processorArchitecture.Equals("x86"))
-
-rTest.IsMatch(formattedString))
+-----------------------------------
+14 rTest.IsMatch(formattedString))
         return rTest.Replace(formattedString, string.Empty)
 
-Regex(@"(\e(\[([\d
+-----------------------------------
+15 Regex(@"(\e(\[([\d
 
-50d).ToList()
+-----------------------------------
+0 ".ContainsMabster())
 
-weights.zip(data).
+-----------------------------------
+1 equivalent .Method().Method.Method()
 
-asdfas".MyMethod()
+-----------------------------------
+2 Date(Date.parse( dateString ))
 
-".ContainsMabster())
+-----------------------------------
+3 o).Take(5)
 
-equivalent .Method().Method.Method()
+-----------------------------------
+4 Html.Resource("ResourceName", "foo", "bar")
 
-Date(Date.parse( dateString ))
+-----------------------------------
+5 SCG (System.Collections.Generic),
 
-o).Take(5)
+-----------------------------------
+6 Node.Bounds.Contains( pt ) )
 
-Html.Resource("ResourceName", "foo", "bar")
-
-SCG (System.Collections.Generic),
-
-]).Distinct().OrderBy(
-
-Node.Bounds.Contains( pt ) )
-
-Console.Error.WriteLine("
-
-C.
+-----------------------------------
+7 C.
         Buffer.BlockCopy("Hello!".ToCharArray(), 0,
 
-GCHandleType.Pinned.
+-----------------------------------
+8 GCHandleType.Pinned.
         fixed (
 
