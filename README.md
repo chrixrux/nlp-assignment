@@ -193,7 +193,12 @@ From index 859 to 872 API mentioned: handle.Free()
 Goal: Find all API mentions in the dataset using a CRF model.
 Command: java -jar StackoverflowAnalyzer.jar pathToDataset crfAPIMentions
 Output: 
-As we can see all APIs were correctly recognized.
+
+4 API mentions found with the trained CRF
+From index 537 to 571 API mentioned: Marshal.SizeOf(typeof(StructType))
+From index 714 to 761 API mentioned: GCHandle.Alloc(readBuffer, GCHandleType.Pinned)
+From index 773 to 857 API mentioned: (StructType) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(StructType))
+From index 859 to 872 API mentioned: handle.Free()
  		
 -------------------------------------------------------------------------------------------------------------------------------------------------------
 

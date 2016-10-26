@@ -142,7 +142,7 @@ public class StackoverflowAnalyzer {
 			perform4CrossValidation();
 
 		default:
-			System.out.println("Function " + function + "is not recognized.");
+			System.out.println("Function " + function + " is not recognized.");
 			printUsage();
 		}
 	}
@@ -231,7 +231,6 @@ public class StackoverflowAnalyzer {
 	}
 
 	private static void performCrfApiMentions() {
-		System.out.println("Calling the right method");
 		Chunker chunker = new CrfApiChunker();
 		Chunking chunking = chunker.chunk(text);
 		Set<Chunk> chunkSet = chunking.chunkSet();
