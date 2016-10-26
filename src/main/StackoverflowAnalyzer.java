@@ -2,7 +2,6 @@ package main;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -11,7 +10,7 @@ import com.aliasi.chunk.Chunker;
 import com.aliasi.chunk.Chunking;
 
 import crf.APIAnnotationsCrossValidation;
-import crf.FullCrfApiFinder;
+import crf.CrfApiChunker;
 import posTagger.POSTagger;
 import posTagger.SentenceDetector;
 import regExChunker.APIRegexChunker;
@@ -205,6 +204,7 @@ public class StackoverflowAnalyzer {
 		Chunker chunker = new APIRegexChunker();
 		Chunking chunking = chunker.chunk(text);
 		Set<Chunk> chunkSet = chunking.chunkSet();
+		
 		//Just used to evaluate RegEx Api finder not necessary for actual API recognition 
 		/*ANNParser annParser = new ANNParser("resources/data/annotated_dataset.ann");
 		List<Annotation> manuallyAnnotatedAPIs = annParser.getAnnotationList();
@@ -220,7 +220,7 @@ public class StackoverflowAnalyzer {
 			int endIndex = chunk.end();
 			String apiMention = text.substring(startIndex, endIndex);
 		//	recognizedAPIMentions.add(apiMention);
-			System.out.println("From index " + startIndex + " to " + endIndex + "API mentioned: " + apiMention);
+			System.out.println("From index " + startIndex + " to " + endIndex + " API mentioned: " + apiMention);
 		}
 	/*	APIAnnotationEvaluator evaluator = new APIAnnotationEvaluator();
 		Evaluation eval = evaluator.performEvaluation(recognizedAPIMentions, manuallyAnnotatedAPITexts);
@@ -231,15 +231,17 @@ public class StackoverflowAnalyzer {
 	}
 
 	private static void performCrfApiMentions() {
-		FullCrfApiFinder apiFinder = new FullCrfApiFinder(text);
-		Set<Chunk> chunkSet = apiFinder.chunkSet();
+		System.out.println("Calling the right method");
+		Chunker chunker = new CrfApiChunker();
+		Chunking chunking = chunker.chunk(text);
+		Set<Chunk> chunkSet = chunking.chunkSet();
 
 		System.out.println(chunkSet.size() + " API mentions found with the trained CRF");
 		for (Chunk chunk : chunkSet) {
 			int startIndex = chunk.start();
 			int endIndex = chunk.end();
 			String apiMention = text.substring(startIndex, endIndex);
-			System.out.println("From index " + startIndex + " to " + endIndex + "API mentioned: " + apiMention);
+			System.out.println("From index " + startIndex + " to " + endIndex + " API mentioned: " + apiMention);
 		}
 	}
 

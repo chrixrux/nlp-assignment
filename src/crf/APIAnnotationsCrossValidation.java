@@ -4,13 +4,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import com.aliasi.chunk.Chunk;
-import com.aliasi.chunk.ChunkerEvaluator;
 import com.aliasi.chunk.Chunking;
 import com.aliasi.crf.ChainCrfChunker;
 import com.aliasi.util.AbstractExternalizable;
@@ -29,7 +28,9 @@ public class APIAnnotationsCrossValidation {
 		} catch (Exception e) {
 			System.out.println("Error in opening output files");
 		}
-
+		
+		System.out.println("Training and evaluating the model. This might take a while.");
+		
 		Evaluation[] evaluationResults = new Evaluation[4];
 		// Iterate over each quarter of the dataset to use it for testing
 		for (int i = 0; i < 4; i++) {
@@ -68,6 +69,7 @@ public class APIAnnotationsCrossValidation {
 						testListAnnotations.get(testListAnnotations.size() - 1).end);
 			}
 			//Perform the actual named entity recognization on this iterartions testDataset
+			
 			Chunking chunking = crfChunker.chunk(testDataset);
 			Set<Chunk> chunkSet = chunking.chunkSet();
 			

@@ -74,7 +74,6 @@ public class APIAnnotationCrossValidationTrain {
 		int maxEpochs = 5000;
 
 		Reporter reporter = Reporters.stdOut().setLevel(LogLevel.NONE);
-		System.out.println("Training the model. This might take a while.");
 		//Train the model
 		ChainCrfChunker crfChunker = ChainCrfChunker.estimate(corpus, tagChunkCodec, tokenizerFactory, featureExtractor,
 				addIntercept, minFeatureCount, cacheFeatures, prior, priorBlockSize, annealingSchedule, minImprovement,

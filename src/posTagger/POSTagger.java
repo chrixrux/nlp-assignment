@@ -43,35 +43,43 @@ public class POSTagger {
 
 	public void printBestPosTag(List<String> sentences) {
 		// For each sentence we split it in a token list and pass it to the decoder to perform the stemming
+		int sentenceCounter = 1;
 		for (String sentence : sentences) {
 			List<String> tokens = indoEuropeanTokenization(sentence);
 			Tagging<String> taggingResults = decoder.tag(tokens);
+			System.out.println("Sentence " + sentenceCounter +":");
 			System.out.println(taggingResults.toString());
+			sentenceCounter++;
 		}
 	}
 
 	public void printNBestPosTags(List<String> sentences, int maxResults) {
-		System.out.printf("Score %13s", "Sentences\n");
+		int sentenceCounter = 1;
 		for (String sentence : sentences) {
 			List<String> tokens = indoEuropeanTokenization(sentence);
 			Iterator<ScoredTagging<String>> iterator = decoder.tagNBest(tokens, maxResults);
 			
 			//The tagger returns the specified number of tag sequences.
 			//we iterate over them to print the score and tag sequence
+			
+			System.out.println("\nSentence " + sentenceCounter +":");
 			while (iterator.hasNext()) {
 				ScoredTagging<String> scoredTagging = iterator.next();
-				System.out.printf("Score: %-8.3f ", scoredTagging.score());
 				
+				System.out.printf("Score: %-8.3f ", scoredTagging.score());
 				for (int i = 0; i < scoredTagging.size(); i++) {
 				System.out.print(" " + scoredTagging.token(i) + "/" + scoredTagging.tag(i));
 				}
+				
 				System.out.println();
 			}
+			sentenceCounter++;
 		}
 	}
 
 	public void printPosTagLattice(List<String> sentences, int numberOfTags) {
 		System.out.printf("Token %14s", "Prob/Tag");
+		int sentenceCounter =1;
 		for (String sentence : sentences) {
 			List<String> tokens = indoEuropeanTokenization(sentence);
 			
@@ -79,6 +87,7 @@ public class POSTagger {
 			TagLattice<String> tagLattice = decoder.tagMarginal(tokens);
 			
 			System.out.println();
+			System.out.println("Sentence " + sentenceCounter +":");
 			for (int i = 0; i < tagLattice.numTokens(); i++) {
 				System.out.printf("%-10s", tokens.get(i) + " ");
 				ConditionalClassification cc = tagLattice.tokenClassification(i);
@@ -89,6 +98,7 @@ public class POSTagger {
 				}
 				System.out.println();
 			}
+			sentenceCounter++;
 		}
 	}
 	
