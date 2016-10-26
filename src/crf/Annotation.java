@@ -1,3 +1,4 @@
+package crf;
 /**
  * This is a POJO to store annotations that are parsed from brat
  * @author christian

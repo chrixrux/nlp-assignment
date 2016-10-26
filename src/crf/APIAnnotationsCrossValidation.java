@@ -1,3 +1,4 @@
+package crf;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -29,7 +30,7 @@ public class APIAnnotationsCrossValidation {
 			System.out.println("Error in opening output files");
 		}
 
-		double totalf1 = 0;
+		Evaluation[] evaluationResults = new Evaluation[4];
 		// Iterate over each quarter of the dataset to use it for testing
 		for (int i = 0; i < 4; i++) {
 			// i specifies wich quarter is used for testing the others are for
@@ -82,16 +83,34 @@ public class APIAnnotationsCrossValidation {
 			}
 			//recognizedAPIMentions contain all the recognized APImentions while testAnnotationText contains all manually annotated apis 
 			//totalf1 += calculateF1(recognizedAPIMentions, testAnnotationTexts);
+			//Evaluate the result of each iteration
 			APIAnnotationEvaluator evaluator = new APIAnnotationEvaluator();
-			evaluator.performEvaluation(recognizedAPIMentions, testAnnotationTexts);
+			evaluationResults[i] = evaluator.performEvaluation(recognizedAPIMentions, testAnnotationTexts);
 			
 		}
+		
+		double averagePrecision = 0;
+		double averageRecall = 0;
+		double averageF1 = 0;
 		//totalf1 = totalf1 / 4;
 		//System.out.println("totalF1: " + totalf1);
+		for(Evaluation eval: evaluationResults) {
+			averagePrecision += eval.precision;
+			averageRecall += eval.recall;
+			averageF1 += eval.f1;
+		}
+		
+		averagePrecision = averagePrecision/4;
+		averageRecall = averageRecall/4;
+		averageF1 = averageF1/4;
+		
+		System.out.println("Average Precision: " + averagePrecision);
+		System.out.println("Average Recall: " + averageRecall);
+		System.out.println("Average F1: " + averageF1);
 		output_file.close();
 	}
 
-	public double calculateF1(List<String> recognizedAPIMentions, List<String> annotationTexts) {
+	/*public double calculateF1(List<String> recognizedAPIMentions, List<String> annotationTexts) {
 		double correctMatches = correctMatches(recognizedAPIMentions, annotationTexts);
 		double precision = correctMatches / recognizedAPIMentions.size();
 		System.out.println("precision: " + precision);
@@ -114,6 +133,6 @@ public class APIAnnotationsCrossValidation {
 			}
 		}
 		return correctMatches;
-	}
+	} */
 
 }

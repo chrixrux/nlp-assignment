@@ -1,3 +1,4 @@
+package crf;
 import java.util.List;
 
 import com.aliasi.chunk.Chunk;

@@ -1,3 +1,4 @@
+package main;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,6 +10,8 @@ import com.aliasi.chunk.Chunk;
 import com.aliasi.chunk.Chunker;
 import com.aliasi.chunk.Chunking;
 
+import crf.APIAnnotationsCrossValidation;
+import crf.FullCrfApiFinder;
 import posTagger.POSTagger;
 import posTagger.SentenceDetector;
 import regExChunker.APIRegexChunker;
@@ -203,24 +206,28 @@ public class StackoverflowAnalyzer {
 		Chunking chunking = chunker.chunk(text);
 		Set<Chunk> chunkSet = chunking.chunkSet();
 		//Just used to evaluate RegEx Api finder not necessary for actual API recognition 
-		ANNParser annParser = new ANNParser("resources/data/annotated_dataset.ann");
+		/*ANNParser annParser = new ANNParser("resources/data/annotated_dataset.ann");
 		List<Annotation> manuallyAnnotatedAPIs = annParser.getAnnotationList();
 		List<String> manuallyAnnotatedAPITexts = new ArrayList<>();
 		for (Annotation ann : manuallyAnnotatedAPIs) {
 			manuallyAnnotatedAPITexts.add(ann.text);
 		}
-		List<String> recognizedAPIMentions = new ArrayList<>();
+		List<String> recognizedAPIMentions = new ArrayList<>(); */
 		
 		System.out.println(chunkSet.size() + " API mentions found with a regular expression");
 		for (Chunk chunk : chunkSet) {
 			int startIndex = chunk.start();
 			int endIndex = chunk.end();
 			String apiMention = text.substring(startIndex, endIndex);
-			recognizedAPIMentions.add(apiMention);
+		//	recognizedAPIMentions.add(apiMention);
 			System.out.println("From index " + startIndex + " to " + endIndex + "API mentioned: " + apiMention);
 		}
-		APIAnnotationEvaluator evaluator = new APIAnnotationEvaluator();
-		evaluator.performEvaluation(recognizedAPIMentions, manuallyAnnotatedAPITexts);
+	/*	APIAnnotationEvaluator evaluator = new APIAnnotationEvaluator();
+		Evaluation eval = evaluator.performEvaluation(recognizedAPIMentions, manuallyAnnotatedAPITexts);
+		
+		System.out.println("Precision: " + eval.precision);
+		System.out.println("Recall: " + eval.recall);
+		System.out.println("F1: " + eval.f1); */
 	}
 
 	private static void performCrfApiMentions() {

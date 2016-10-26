@@ -1,3 +1,4 @@
+package crf;
 import java.util.List;
 
 public class QuarterList {
