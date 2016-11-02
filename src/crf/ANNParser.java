@@ -49,7 +49,7 @@ public class ANNParser {
 			startIndex = Integer.parseInt(lines[lineIndex].substring(8,12));
 			endIndex = Integer.parseInt(lines[lineIndex].substring(13,17));
 			text = lines[lineIndex].substring(18);
-		} else if (lineIndex < 98) {
+		} else if (lineIndex < 99) {
 			startIndex = Integer.parseInt(lines[lineIndex].substring(8,13));
 			endIndex = Integer.parseInt(lines[lineIndex].substring(14,19));
 			text = lines[lineIndex].substring(20);
