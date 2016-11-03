@@ -57,11 +57,11 @@ java -jar StackoverflowAnalyzer.jar pathToDataset
  ```
 For the following examples one of the posts from our full 500 posts database will be used. It containes multiple natural language sentences and five API mentions in the source code. It can be found in recources/data/exampleDataset.
 
-```c#
+```
 I'm trying to read binary data using C#. I have all information about the layout of the data in the files I want to read. I'm able to read the data "chunk by chunk", i.e. getting the first 40 bytes of data converting it to a string, get the next 40 bytes, ....
 Since there are at least three slighlty different version of the data, I would like to read the data directly into a struct. It just feels so much more right than by reading it "line by line".
 I have tried the following approach but to no avail:
-
+```c#
 StructType aStruct;
 int count = Marshal.SizeOf(typeof(StructType));
 byte[] readBuffer = new byte[count];
@@ -70,7 +70,7 @@ readBuffer = reader.ReadBytes(count);
 GCHandle handle = GCHandle.Alloc(readBuffer, GCHandleType.Pinned);
 aStruct = (StructType) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(StructType));
 handle.Free();
-
+``
 The stream is an opened FileStream from which I have began to read from. I get an AccessViolationException when using Marshal.PtrToStructure.
 The stream contains more information than I'm trying to read since I'm not interested in data at the end of the file.
 
