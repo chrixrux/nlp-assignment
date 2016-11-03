@@ -5,7 +5,6 @@ We developed two programs, one called  StackoverflowXMLParser which can be used 
 
 The programs can be started from the command line. Please make sure  to navigate to the extracted folder first.
 
--------------------------------------------------------------------------------------------------------------------------------------------
 The StackoverflowXMLParser can be used to extract posts from the unzipped "Posts.xml" file provided by Stackexchange at the following link: https://archive.org/details/stackexchange
 The parser will create a new "dataset.txt" file containing the extractet posts and a "stats.txt" file containing statistics about the dataset like the answer distribution. 
 	 
@@ -46,6 +45,7 @@ It offers the following functions:
 - 4CrossValidation: This will perform 4 Cross Validation using our manually annotated dataset. You are not able to specify your own dataset for this function as this would mean you also have to provide the correct annotations.
 					  
 Usage:
+```bash
 java -jar StackoverflowAnalyzer.jar pathToDataset
 												stemming 		 numberOfTopWords 
 												posTagging 		 numberOfSentences seed
@@ -54,9 +54,10 @@ java -jar StackoverflowAnalyzer.jar pathToDataset
   												regexAPIMentions
  												crfAPIMentions		
  									4CrossValidation
- 										
+ ```
 For the following examples one of the posts from our full 500 posts database will be used. It containes multiple natural language sentences and five API mentions in the source code. It can be found in recources/data/exampleDataset.
-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+```c#
 I'm trying to read binary data using C#. I have all information about the layout of the data in the files I want to read. I'm able to read the data "chunk by chunk", i.e. getting the first 40 bytes of data converting it to a string, get the next 40 bytes, ....
 Since there are at least three slighlty different version of the data, I would like to read the data directly into a struct. It just feels so much more right than by reading it "line by line".
 I have tried the following approach but to no avail:
@@ -75,6 +76,7 @@ The stream contains more information than I'm trying to read since I'm not inter
 
 The examples code is changed from original to make this question shorter.
 How would I read binary data from a file into a struct?
+```
 -------------------------------------------------------------------------------------------------------------------------------------------------------
 Goal: Print Top 5 most common words before and after stemming.
 Command: java -jar StackoverflowAnalyzer.jar pathToDataset	stemming 5
