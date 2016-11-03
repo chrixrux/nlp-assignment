@@ -85,7 +85,7 @@ How would I read binary data from a file into a struct?
 ```
 ___
 
-##### Stemming
+#### Stemming
 **Goal:**  Print Top 5 most common words before and after stemming.
 
 **Command:**
@@ -93,7 +93,7 @@ ___
 java -jar StackoverflowAnalyzer.jar pathToDataset	stemming 5
 ```
 **Output:**
-
+```
 Top 5 Words after stop words were removed and before the stemming:  
 Position: 1   Token: i          Count: 12  
 Position: 2   Token: data       Count: 8  
@@ -108,9 +108,10 @@ Position: 2   Token: data       Count: 8   Origins: [data]
 Position: 3   Token: read       Count: 8   Origins: [read, reading]  
 Position: 4   Token: structtyp  Count: 4   Origins: [structtype]  
 Position: 5   Token: byte       Count: 4   Origins: [bytes, byte]
+```
 ___
 
-##### Finding the most likely POS sequence
+#### Finding the most likely POS sequence
 
 **Goal:** Print the most likely POS sequence for two sentences of the dataset. Specify the seed to get repeatable results.
 
@@ -162,12 +163,13 @@ ___
  java -jar StackoverflowAnalyzer.jar pathToDataset	nBestPOSTag 2 1 3
  ```
 **Output:**
+```
 Token       Prob/Tag
-+ Sentence 1:  
+Sentence 1:  
 The         0.999/at   0.001/np   0.000/jj  
 stream      0.992/nn   0.006/rb   0.002/jj  
 contains    0.989/vbz  0.011/nns  0.000/nn  
-more         0.930/ap   0.042/ql   0.023/rbr  
+more        0.930/ap   0.042/ql   0.023/rbr  
 information    0.997/nn   0.003/jj   0.000/vb  
 than         0.969/cs   0.031/in   0.000/vbd  
 I            0.917/ppss   0.017/np$   0.015/np  
@@ -181,7 +183,7 @@ I            0.936/ppss   0.012/np$   0.011/np
 '            0.724/'   0.091/nps$   0.042/nns$  
 m            0.790/bem   0.050/wpo   0.021/nil  
 not          0.998/*   0.001/ql   0.001/rb  
-interested    0.972/vbn   0.026/jj   0.002/vbd  
+interested   0.972/vbn   0.026/jj   0.002/vbd  
 in           0.957/in   0.034/rp   0.003/jj  
 data         0.508/nn   0.492/nns   0.000/jj  
 at           0.987/in   0.006/cs   0.002/wpo  
@@ -192,7 +194,7 @@ the          1.000/at   0.000/jj   0.000/nn
 file         0.971/nn   0.014/jj   0.010/nns  
 .            1.000/.   0.000/np   0.000/nn
 
-+ Sentence 2:  
+Sentence 2:  
 I            0.925/ppss   0.017/np   0.014/np$  
 '            0.715/'   0.088/nps$   0.042/nns$  
 m            0.710/bem   0.036/nns$   0.024/nn  
@@ -205,7 +207,7 @@ using        0.977/vbg   0.013/jj   0.005/nn
 C            0.198/nil   0.142/nn   0.089/np  
 *#*           0.192/nil   0.069/pp$$   0.058/uh  
 .            1.000/.   0.000/nil   0.000/np
-
+```
 ___
 
 #### Finding all API mentions with a regular expression
