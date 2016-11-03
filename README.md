@@ -1,3 +1,5 @@
+
+## CZ4045 - Natural Language Processing - Group 11
 Please make sure to download our full package with the following link: https://www.dropbox.com/s/mmsm0b6z59i9sou/CZ4045full.zip?dl=0 . The downloaded zip contains all models and datasets necessary to run our programs. The datasets we used for our analysis can be found in the data folder.
 The file dataset.txt contains roughly 900 total posts and the annotated_dataset.txt contains ca. 100 posts with at least one API mention and ca. 300 API mentions in total.
 
@@ -5,24 +7,27 @@ We developed two programs, one called  StackoverflowXMLParser which can be used 
 
 The programs can be started from the command line. Please make sure  to navigate to the extracted folder first.
 
+### StackoverflowXMLParser
 The StackoverflowXMLParser can be used to extract posts from the unzipped "Posts.xml" file provided by Stackexchange at the following link: https://archive.org/details/stackexchange
 The parser will create a new "dataset.txt" file containing the extractet posts and a "stats.txt" file containing statistics about the dataset like the answer distribution.
-
- + Required parameters:
-	  - pathToPostsFile
-	 	- pathToOutputDirectory
- + Optional parameters (If one optional parameter is provided, all optional parameters are required)
-	 	- numberOfDiscussionThreads
-	 	- totalNumberOfPosts (this includes questions and answers)
-	 	- minimumAnswers
-	 	- maximumAnswers
++ Required parameters:
+ + pathToPostsFile
+ + pathToOutputDirectory
++ Optional parameters (If one optional parameter is provided, all optional parameters are required)
+ + numberOfDiscussionThreads
+ + totalNumberOfPosts (this includes questions and answers)
+ + minimumAnswers
+ + maximumAnswers
 
 To run the parser please type:
+```
 java -jar StackoverflowXMLParser.jar pathToPostsFile pathToOutputDirectory numberOfDiscussionThreads totalNumberOfPosts minimumAnswers maximiumAnswers
-
-For the assignment we extracted 900 total posts from 200 discussion threads, with each thread having at least 4 and at most 7 answers.
+```
+For the assignment we extracted 900 total posts from 200 discussion threads, with each thread having at least 4 and at most 7 answers.  
 The command would look like this:
+```
 StackoverflowXMLParser pathToPostsFile pathToOutputDirectory 200 900 4 7
+```
 These are also the default values if no optional parameters are provided.
 
 ### StackoverflowAnalyzer
@@ -79,6 +84,7 @@ The examples code is changed from original to make this question shorter.
 How would I read binary data from a file into a struct?
 ```
 ___
+
 ##### Stemming
 **Goal:**  Print Top 5 most common words before and after stemming.
 
@@ -103,6 +109,7 @@ Position: 3   Token: read       Count: 8   Origins: [read, reading]
 Position: 4   Token: structtyp  Count: 4   Origins: [structtype]  
 Position: 5   Token: byte       Count: 4   Origins: [bytes, byte]
 ___
+
 ##### Finding the most likely POS sequence
 
 **Goal:** Print the most likely POS sequence for two sentences of the dataset. Specify the seed to get repeatable results.
@@ -145,6 +152,8 @@ java -jar StackoverflowAnalyzer.jar pathToDataset nBestPOSSequence 2 1 3
 
 **Comment:** For example we can see in the second sentence for the first and second POS sequence the POS tag for the token 'data' is different. In the first sequence it's 'nns' and in the second 'nn'. As we can also see the POSSequence with the highest score is the sequence printed by the earlier posTagging command.
 
+___
+
 #### Print the n most likeliest POS tags for each word
 
 **Goal:** Print the three most likeliest POS Tags and their probabilities for each word in two sentences of the dataset. Specify the seed to get repeatable results.
@@ -154,81 +163,90 @@ java -jar StackoverflowAnalyzer.jar pathToDataset nBestPOSSequence 2 1 3
  ```
 **Output:**
 Token       Prob/Tag
-+ Sentence 1:
-Token | Prob/Tag
-------|---------
-The     |     0.999/at |  0.001/np |  0.000/jj  
-stream   |    0.992/nn  | 0.006/rb |  0.002/jj
-contains  |   0.989/vbz  | 0.011/nns |  0.000/nn
-more         0.930/ap   0.042/ql   0.023/rbr
-information    0.997/nn   0.003/jj   0.000/vb
-than         0.969/cs   0.031/in   0.000/vbd
-I            0.917/ppss   0.017/np$   0.015/np
-'            0.715/'   0.088/nps$   0.042/nns$
-m            0.710/bem   0.036/nns$   0.024/nn
-trying       0.977/vbg   0.022/jj   0.002/nil
-to           0.982/to   0.017/in   0.000/rb
-read         0.975/vb   0.011/vbn   0.008/nn
-since        0.957/cs   0.029/rb   0.014/in
-I            0.936/ppss   0.012/np$   0.011/np
-'            0.724/'   0.091/nps$   0.042/nns$
-m            0.790/bem   0.050/wpo   0.021/nil
-not          0.998/*   0.001/ql   0.001/rb
-interested    0.972/vbn   0.026/jj   0.002/vbd
-in           0.957/in   0.034/rp   0.003/jj
-data         0.508/nn   0.492/nns   0.000/jj
-at           0.987/in   0.006/cs   0.002/wpo
-the          1.000/at   0.000/jj   0.000/nn
-end          0.986/nn   0.005/vbn   0.004/jj
-of           1.000/in   0.000/rb   0.000/vbz
-the          1.000/at   0.000/jj   0.000/nn
-file         0.971/nn   0.014/jj   0.010/nns
++ Sentence 1:  
+The         0.999/at   0.001/np   0.000/jj  
+stream      0.992/nn   0.006/rb   0.002/jj  
+contains    0.989/vbz  0.011/nns  0.000/nn  
+more         0.930/ap   0.042/ql   0.023/rbr  
+information    0.997/nn   0.003/jj   0.000/vb  
+than         0.969/cs   0.031/in   0.000/vbd  
+I            0.917/ppss   0.017/np$   0.015/np  
+'            0.715/'   0.088/nps$   0.042/nns$  
+m            0.710/bem   0.036/nns$   0.024/nn  
+trying       0.977/vbg   0.022/jj   0.002/nil  
+to           0.982/to   0.017/in   0.000/rb  
+read         0.975/vb   0.011/vbn   0.008/nn  
+since        0.957/cs   0.029/rb   0.014/in  
+I            0.936/ppss   0.012/np$   0.011/np  
+'            0.724/'   0.091/nps$   0.042/nns$  
+m            0.790/bem   0.050/wpo   0.021/nil  
+not          0.998/*   0.001/ql   0.001/rb  
+interested    0.972/vbn   0.026/jj   0.002/vbd  
+in           0.957/in   0.034/rp   0.003/jj  
+data         0.508/nn   0.492/nns   0.000/jj  
+at           0.987/in   0.006/cs   0.002/wpo  
+the          1.000/at   0.000/jj   0.000/nn  
+end          0.986/nn   0.005/vbn   0.004/jj  
+of           1.000/in   0.000/rb   0.000/vbz  
+the          1.000/at   0.000/jj   0.000/nn  
+file         0.971/nn   0.014/jj   0.010/nns  
 .            1.000/.   0.000/np   0.000/nn
 
-+ Sentence 2:
-I            0.925/ppss   0.017/np   0.014/np$
-'            0.715/'   0.088/nps$   0.042/nns$
-m            0.710/bem   0.036/nns$   0.024/nn
-trying       0.977/vbg   0.022/jj   0.002/nil
-to           0.983/to   0.016/in   0.000/rb
-read         0.976/vb   0.008/vbn   0.008/jj
-binary       0.965/jj   0.034/nn   0.000/np
-data         0.652/nns   0.348/nn   0.000/jj
-using        0.977/vbg   0.013/jj   0.005/nn
-C            0.198/nil   0.142/nn   0.089/np
-*#*           0.192/nil   0.069/pp$$   0.058/uh
++ Sentence 2:  
+I            0.925/ppss   0.017/np   0.014/np$  
+'            0.715/'   0.088/nps$   0.042/nns$  
+m            0.710/bem   0.036/nns$   0.024/nn  
+trying       0.977/vbg   0.022/jj   0.002/nil  
+to           0.983/to   0.016/in   0.000/rb  
+read         0.976/vb   0.008/vbn   0.008/jj  
+binary       0.965/jj   0.034/nn   0.000/np  
+data         0.652/nns   0.348/nn   0.000/jj  
+using        0.977/vbg   0.013/jj   0.005/nn  
+C            0.198/nil   0.142/nn   0.089/np  
+*#*           0.192/nil   0.069/pp$$   0.058/uh  
 .            1.000/.   0.000/nil   0.000/np
 
+___
 
-Goal: Find all API mentions in the dataset using a regular expression.
-Command: java -jar StackoverflowAnalyzer.jar pathToDataset regexAPIMentions
-Output:
-
-5 API mentions found with a regular expression
-From index 537 to 571 API mentioned: Marshal.SizeOf(typeof(StructType))
-From index 671 to 694 API mentioned: reader.ReadBytes(count)
-From index 714 to 761 API mentioned: GCHandle.Alloc(readBuffer, GCHandleType.Pinned)
-From index 786 to 857 API mentioned: Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(StructType))
+#### Finding all API mentions with a regular expression
+**Goal:** Find all API mentions in the dataset using a regular expression.
+**Command:**
+```
+ java -jar StackoverflowAnalyzer.jar pathToDataset regexAPIMentions
+ ```
+**Output:**  
+5 API mentions found with a regular expression  
+From index 537 to 571 API mentioned: Marshal.SizeOf(typeof(StructType))  
+From index 671 to 694 API mentioned: reader.ReadBytes(count)  
+From index 714 to 761 API mentioned: GCHandle.Alloc(readBuffer, GCHandleType.Pinned)  
+From index 786 to 857 API mentioned: Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(StructType))  
 From index 859 to 872 API mentioned: handle.Free()
 
--------------------------------------------------------------------------------------------------------------------------------------------------------
+___
 
-Goal: Find all API mentions in the dataset using a CRF model.
-Command: java -jar StackoverflowAnalyzer.jar pathToDataset crfAPIMentions
-Output:
+#### Find all API mentions using the CRF
 
-4 API mentions found with the trained CRF
-From index 537 to 571 API mentioned: Marshal.SizeOf(typeof(StructType))
-From index 714 to 761 API mentioned: GCHandle.Alloc(readBuffer, GCHandleType.Pinned)
-From index 773 to 857 API mentioned: (StructType) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(StructType))
+**Goal:** Find all API mentions in the dataset using a CRF model.
+**Command:**
+```
+java -jar StackoverflowAnalyzer.jar pathToDataset crfAPIMentions
+```
+**Output:**  
+4 API mentions found with the trained CRF  
+From index 537 to 571 API mentioned: Marshal.SizeOf(typeof(StructType))  
+From index 714 to 761 API mentioned: GCHandle.Alloc(readBuffer, GCHandleType.Pinned)  
+From index 773 to 857 API mentioned: (StructType) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(StructType))  
 From index 859 to 872 API mentioned: handle.Free()
 
--------------------------------------------------------------------------------------------------------------------------------------------------------
+#### Perform 4-fold cross validation
 
-Goal: Perform 4-fold cross validation using our manually annotated dataset.
-Command: java -jar StackoverflowAnalyzer.jar 4CrossValidation
-Output:
-
-Average Precision: 0.50125
-Average Recall: 0.27142857142857146
+**Goal:** Perform 4-fold cross validation using our manually annotated dataset.
+**Command:**
+```
+java -jar StackoverflowAnalyzer.jar 4CrossValidation
+```
+**Output:**  
+Average Precision: 0.50125  
+Average Recall: 0.27142857142857146  
 Average F1: 0.3488779269170512
+___
