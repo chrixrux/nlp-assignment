@@ -50,7 +50,7 @@ It offers the following functions:
 - 4CrossValidation: This will perform 4 Cross Validation using our manually annotated dataset. You are not able to specify your own dataset for this function as this would mean you also have to provide the correct annotations.
 
 **Usage:**
-```bash
+```
 java -jar StackoverflowAnalyzer.jar pathToDataset
 												stemming 		 numberOfTopWords
 												posTagging 		 numberOfSentences seed
@@ -120,13 +120,13 @@ ___
 java -jar StackoverflowAnalyzer.jar pathToDataset	posTagging 2 1
 ```
 **Output:**
-
-+ **Sentence 1:**
+```
+Sentence 1:
 The/at stream/nn contains/vbz more/ap information/nn than/cs I/ppss '/' m/bem trying/vbg to/to read/vb since/cs I/ppss '/' m/bem not/* interested/vbn in/in data/nn at/in the/at end/nn of/in the/at file/nn ./.  
 
-+ **Sentence 2:**
+Sentence 2:
 I/ppss '/' m/bem trying/vbg to/to read/vb binary/jj data/nns using/vbg C/nil #/nil ./.
-
+```
 **Comment:** As we can see Sentence 3 are actually two sentences but the sentence detection failed to distinguish them because they are not separated by a dot but by an ellipses.
 ___
 
@@ -139,17 +139,17 @@ ___
 java -jar StackoverflowAnalyzer.jar pathToDataset nBestPOSSequence 2 1 3
 ```
 **Output:**
+```
+Sentence 1:
+Score: -238.790  The/at stream/nn contains/vbz more/ap information/nn than/cs I/ppss '/' m/bem trying/vbg to/to read/vb since/cs I/ppss '/' m/bem not/* interested/vbn in/in data/nn at/in the/at end/nn of/in the/at file/nn ./.
+Score: -238.872  The/at stream/nn contains/vbz more/ap information/nn than/cs I/ppss '/' m/bem trying/vbg to/to read/vb since/cs I/ppss '/' m/bem not/* interested/vbn in/in data/nns at/in the/at end/nn of/in the/at file/nn ./.
+Score: -243.149  The/at stream/nn contains/vbz more/ap information/nn than/cs I/ppss '/nps$ m/bem trying/vbg to/to read/vb since/cs I/ppss '/' m/bem not/* interested/vbn in/in data/nn at/in the/at end/nn of/in the/at file/nn ./.
 
-* Sentence 1:
- * Score: -238.790  The/at stream/nn contains/vbz more/ap information/nn than/cs I/ppss '/' m/bem trying/vbg to/to read/vb since/cs I/ppss '/' m/bem not/* interested/vbn in/in data/nn at/in the/at end/nn of/in the/at file/nn ./.
- * Score: -238.872  The/at stream/nn contains/vbz more/ap information/nn than/cs I/ppss '/' m/bem trying/vbg to/to read/vb since/cs I/ppss '/' m/bem not/* interested/vbn in/in data/nns at/in the/at end/nn of/in the/at file/nn ./.
- * Score: -243.149  The/at stream/nn contains/vbz more/ap information/nn than/cs I/ppss '/nps$ m/bem trying/vbg to/to read/vb since/cs I/ppss '/' m/bem not/* interested/vbn in/in data/nn at/in the/at end/nn of/in the/at file/nn ./.
-
-* Sentence 2:
- * Score: -149.250  I/ppss '/' m/bem trying/vbg to/to read/vb binary/jj data/nns using/vbg C/nil #/nil ./.
- * Score: -150.560  I/ppss '/' m/bem trying/vbg to/to read/vb binary/jj data/nn using/vbg C/nil #/nil ./.
- * Score: -152.674  I/ppss '/' m/bem trying/vbg to/to read/vb  binary/jj data/nns using/vbg C/uh #/uh ./.
-
+Sentence 2:
+Score: -149.250  I/ppss '/' m/bem trying/vbg to/to read/vb binary/jj data/nns using/vbg C/nil #/nil ./.
+Score: -150.560  I/ppss '/' m/bem trying/vbg to/to read/vb binary/jj data/nn using/vbg C/nil #/nil ./.
+Score: -152.674  I/ppss '/' m/bem trying/vbg to/to read/vb  binary/jj data/nns using/vbg C/uh #/uh ./.
+```
 
 **Comment:** For example we can see in the second sentence for the first and second POS sequence the POS tag for the token 'data' is different. In the first sequence it's 'nns' and in the second 'nn'. As we can also see the POSSequence with the highest score is the sequence printed by the earlier posTagging command.
 
@@ -217,13 +217,14 @@ ___
  java -jar StackoverflowAnalyzer.jar pathToDataset regexAPIMentions
  ```
 **Output:**  
+```
 5 API mentions found with a regular expression  
 From index 537 to 571 API mentioned: Marshal.SizeOf(typeof(StructType))  
 From index 671 to 694 API mentioned: reader.ReadBytes(count)  
 From index 714 to 761 API mentioned: GCHandle.Alloc(readBuffer, GCHandleType.Pinned)  
 From index 786 to 857 API mentioned: Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(StructType))  
 From index 859 to 872 API mentioned: handle.Free()
-
+```
 ___
 
 #### Find all API mentions using the CRF
@@ -234,11 +235,15 @@ ___
 java -jar StackoverflowAnalyzer.jar pathToDataset crfAPIMentions
 ```
 **Output:**  
+
+```
 4 API mentions found with the trained CRF  
 From index 537 to 571 API mentioned: Marshal.SizeOf(typeof(StructType))  
 From index 714 to 761 API mentioned: GCHandle.Alloc(readBuffer, GCHandleType.Pinned)  
 From index 773 to 857 API mentioned: (StructType) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(StructType))  
 From index 859 to 872 API mentioned: handle.Free()
+```
+___
 
 #### Perform 4-fold cross validation
 
@@ -247,8 +252,10 @@ From index 859 to 872 API mentioned: handle.Free()
 ```
 java -jar StackoverflowAnalyzer.jar 4CrossValidation
 ```
-**Output:**  
+**Output:**
+```
 Average Precision: 0.50125  
 Average Recall: 0.27142857142857146  
 Average F1: 0.3488779269170512
+```
 ___
