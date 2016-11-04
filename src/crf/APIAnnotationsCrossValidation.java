@@ -84,7 +84,6 @@ public class APIAnnotationsCrossValidation {
 				recognizedAPIMentions.add(ann);
 			}
 			//recognizedAPIMentions contain all the recognized APImentions while testAnnotationText contains all manually annotated apis 
-			//totalf1 += calculateF1(recognizedAPIMentions, testAnnotationTexts);
 			//Evaluate the result of each iteration
 			APIAnnotationEvaluator evaluator = new APIAnnotationEvaluator();
 			evaluationResults[i] = evaluator.performEvaluation(recognizedAPIMentions, testAnnotationTexts);
@@ -94,8 +93,7 @@ public class APIAnnotationsCrossValidation {
 		double averagePrecision = 0;
 		double averageRecall = 0;
 		double averageF1 = 0;
-		//totalf1 = totalf1 / 4;
-		//System.out.println("totalF1: " + totalf1);
+		
 		for(Evaluation eval: evaluationResults) {
 			averagePrecision += eval.precision;
 			averageRecall += eval.recall;
@@ -111,30 +109,4 @@ public class APIAnnotationsCrossValidation {
 		System.out.println("Average F1: " + averageF1);
 		output_file.close();
 	}
-
-	/*public double calculateF1(List<String> recognizedAPIMentions, List<String> annotationTexts) {
-		double correctMatches = correctMatches(recognizedAPIMentions, annotationTexts);
-		double precision = correctMatches / recognizedAPIMentions.size();
-		System.out.println("precision: " + precision);
-		double recall = correctMatches / annotationTexts.size();
-		System.out.println("recall: " + recall);
-		double f1 = 2 * ((precision * recall) / (precision + recall));
-		return f1;
-	}
-
-	public int correctMatches(List<String> recognizedAPIMentions, List<String> annotationTexts) {
-		int correctMatches = 0;
-		int counter = 0;
-		for (String apiMention : recognizedAPIMentions) {
-			if (annotationTexts.contains(apiMention)) {
-				correctMatches++;
-			} else {
-				output_file.println("-----------------------------------");
-				output_file.println(counter + " " + apiMention + "\n");
-				counter++;
-			}
-		}
-		return correctMatches;
-	} */
-
 }
