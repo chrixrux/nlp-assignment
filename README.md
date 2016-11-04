@@ -1,6 +1,6 @@
 
 ## CZ4045 - Natural Language Processing - Group 11
-Please make sure to download our full package with the following link: https://www.dropbox.com/s/mmsm0b6z59i9sou/CZ4045full.zip?dl=0 . The downloaded zip contains all models and datasets necessary to run our programs. The datasets we used for our analysis can be found in the data folder.
+The CZ4045.zip only contains our report and source code, please make sure to download our full package CZ4045full with the following link: https://www.dropbox.com/s/mmsm0b6z59i9sou/CZ4045full.zip?dl=0 . The downloaded zip contains all models, datasets, and binaries necessary to run our programs. The datasets we used for our analysis can be found in the data folder.
 The file dataset.txt contains roughly 900 total posts and the annotated_dataset.txt contains ca. 100 posts with at least one API mention and ca. 300 API mentions in total.
 
 We developed two programs, one called  StackoverflowXMLParser which can be used to extract posts from the unzipped "Posts.xml" file provided by Stackexchange and the other program called StackoverflowAnalyzer offers functionality to analyze the dataset after it was parsed by the StackoverflowXMLParser. If you use the provided dataset.txt in the resources/data folder you can directly use it with the StackoverflowAnalyzer.

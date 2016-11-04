@@ -54,6 +54,7 @@ public class Stemmer {
          Map<String, Set<String>> stemOriginsMap = new HashMap<>();
          
          for (String token: tokens) {
+        	 //For each token perform the stemming
         	String stem = PorterStemmerTokenizerFactory.stem(token);
         	stemList.add(stem);
         	

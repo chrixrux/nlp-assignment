@@ -19,7 +19,6 @@ public class APIAnnotationEvaluator {
 			if (manuallyAnnotatedAPIs.contains(apiMention)) {
 				truePositives++;
 			} else {
-				//System.out.println(apiMention);
 				falsePositives++;
 			}
 		}
