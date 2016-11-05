@@ -148,12 +148,12 @@ public class StackoverflowAnalyzer {
 	}
 
 	private static void printUsage() {
-		System.out.println("Usage: \n" + "StackoverflowAnalyzer pathToDataset \n"
+		System.out.println("Usage: \n" + "java -jar StackoverflowAnalyzer.jar pathToDataset \n"
 				+ "\t\t\t\t stemming numberOfTopWords \n" + "\t\t\t\t posTagging numberOfSentences seed \n"
 				+ "\t\t\t\t nBestPOSSequence numberOfSentences seed n \n"
 				+ "\t\t\t\t nBestPOSTag numberOfSentences seed n  \n" + "\t\t\t\t regexAPIMentions \n"
-				+ "\t\t\t\t crfAPIMentions"
-				+ "\t\t\t\t 4CrossValidation");
+				+ "\t\t\t\t crfAPIMentions \n"
+				+ "\t 4CrossValidation");
 	}
 
 	private static void performStemming(int numberOfTopWords) {
